@@ -24,8 +24,8 @@ const Contact = () => {
 
   const socials = [
     { icon: Github, href: "https://github.com/realvivekrana", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com/in/vivekrana", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com/vivekrana", label: "Twitter" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
+    { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter" },
   ];
 
   return (
@@ -34,7 +34,7 @@ const Contact = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             Get In <span className="gradient-text">Touch</span>
@@ -45,9 +45,9 @@ const Contact = () => {
         <div className="grid md:grid-cols-2 gap-10">
           {/* Info */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0, x: -30, scale: 0.95 }}
+            animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
             className="space-y-6"
           >
             <h3 className="text-xl font-bold text-foreground">Let's work together</h3>
@@ -84,9 +84,9 @@ const Contact = () => {
 
           {/* Form */}
           <motion.form
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.3 }}
+            initial={{ opacity: 0, x: 30, scale: 0.95 }}
+            animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
+            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
             onSubmit={handleSubmit}
             className="glass rounded-2xl p-6 space-y-5"
           >

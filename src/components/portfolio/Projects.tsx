@@ -12,16 +12,27 @@ type Project = {
   githubUrl?: string;
 };
 
+// PROJECTS CONFIGURATION - Add or update your projects here
 const projects: Project[] = [
   {
-    title: "Fullstack E-Commerce App",
+    title: "E-Commerce Website (Full Stack)",
     description:
-      "A complete e-commerce application with product listing, shopping cart, user authentication, and payment integration.",
+      "A modern full-stack e-commerce platform with product listing, shopping cart, authentication system, and responsive user interface built with MERN stack.",
     image: projectEcommerce,
-    tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+    tech: ["React", "Node.js", "Express.js", "MongoDB"],
     liveUrl: "#",
-    githubUrl: "https://github.com/realvivekrana/fullstack-ecommerce-app",
+    githubUrl: "#",
   },
+  // Add more projects here following the same structure
+  // Example:
+  // {
+  //   title: "Your Project Name",
+  //   description: "Project description here",
+  //   image: projectImage, // Import image at the top
+  //   tech: ["React", "Node.js", "etc"],
+  //   liveUrl: "https://your-live-url.com",
+  //   githubUrl: "https://github.com/yourusername/repo",
+  // },
 ];
 
 const Projects = () => {
@@ -34,7 +45,7 @@ const Projects = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             My <span className="gradient-text">Projects</span>
@@ -46,9 +57,14 @@ const Projects = () => {
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 + i * 0.15 }}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ 
+                delay: 0.2 + i * 0.15,
+                duration: 0.5,
+                ease: "easeOut"
+              }}
+              whileHover={{ scale: 1.03, y: -8 }}
               className="glass rounded-2xl overflow-hidden group hover:glow-border transition-all duration-500"
             >
               {/* Image */}

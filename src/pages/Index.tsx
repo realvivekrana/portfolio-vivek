@@ -3,14 +3,18 @@ import Hero from "@/components/portfolio/Hero";
 import About from "@/components/portfolio/About";
 import Skills from "@/components/portfolio/Skills";
 import Projects from "@/components/portfolio/Projects";
-import Journey from "@/components/portfolio/Journey";
+import Experience from "@/components/portfolio/Experience";
+import Education from "@/components/portfolio/Education";
+import Certificates from "@/components/portfolio/Certificates";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 import LoadingScreen from "@/components/portfolio/LoadingScreen";
+import AnimatedBackground from "@/components/portfolio/AnimatedBackground";
 
 const Index = () => {
   return (
     <>
+      <AnimatedBackground />
       <LoadingScreen />
       <Navbar />
       <main>
@@ -18,7 +22,9 @@ const Index = () => {
         <About />
         <Skills />
         <Projects />
-        <Journey />
+        <Experience />
+        <Education />
+        <Certificates />
         <Contact />
       </main>
       <Footer />
