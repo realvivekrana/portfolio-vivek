@@ -60,7 +60,7 @@ export const skills = {
 };
 
 // ============================================
-// FEATURED PROJECTS
+// FEATURED PROJECTS (Initially visible)
 // ============================================
 export const projects = [
   {
@@ -90,20 +90,24 @@ export const projects = [
 ];
 
 // ============================================
-// MORE PROJECTS
+// ADDITIONAL PROJECTS (Show on "Show More" click)
 // ============================================
 export const moreProjects = [
   {
     title: "E-Commerce Website (Full Stack)",
     description: "Modern MERN stack ecommerce platform with product listing, shopping cart, authentication system, and responsive user interface.",
+    image: "/project-ecommerce.svg",
     tech: ["React", "Node.js", "Express.js", "MongoDB"],
+    liveUrl: "#",
     githubUrl: "#",
   },
   // Add more projects here following the same structure:
   // {
   //   title: "Your Project Name",
   //   description: "Brief project description",
+  //   image: "/project-image.svg",
   //   tech: ["Tech1", "Tech2", "Tech3"],
+  //   liveUrl: "https://live-url.com",
   //   githubUrl: "https://github.com/yourusername/repo",
   // },
 ];

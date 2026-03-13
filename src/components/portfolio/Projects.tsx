@@ -1,41 +1,44 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ExternalLink, Github } from "lucide-react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
+import { ExternalLink, Github, ChevronDown } from "lucide-react";
 import { projects, moreProjects } from "@/data/portfolio-data";
 
 const Projects = () => {
-  const featuredRef = useRef(null);
-  const moreRef = useRef(null);
-  const featuredInView = useInView(featuredRef, { once: true, margin: "-100px" });
-  const moreInView = useInView(moreRef, { once: true, margin: "-100px" });
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [showMore, setShowMore] = useState(false);
+
+  // Combine all projects
+  const allProjects = [...projects, ...moreProjects];
+  const displayedProjects = showMore ? allProjects : projects;
 
   return (
     <section id="projects" className="section-padding relative">
-      <div className="container mx-auto">
-        {/* Featured Projects Section */}
-        <div ref={featuredRef}>
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={featuredInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              Featured <span className="gradient-text">Projects</span>
-            </h2>
-            <div className="w-20 h-1 bg-primary mx-auto mb-4 rounded-full" />
-            <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
-              Explore my latest work showcasing modern web applications built with cutting-edge technologies
-            </p>
-          </motion.div>
+      <div className="container mx-auto" ref={ref}>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Featured <span className="gradient-text">Projects</span>
+          </h2>
+          <div className="w-20 h-1 bg-primary mx-auto mb-4 rounded-full" />
+          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
+            Explore my latest work showcasing modern web applications built with cutting-edge technologies
+          </p>
+        </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto mb-20">
-            {projects.map((project, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+          <AnimatePresence>
+            {displayedProjects.map((project, i) => (
               <motion.div
                 key={project.title}
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={featuredInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -30, scale: 0.95 }}
                 transition={{ 
-                  delay: 0.2 + i * 0.1,
+                  delay: i < projects.length ? 0.2 + i * 0.1 : 0,
                   duration: 0.5,
                   ease: "easeOut"
                 }}
@@ -101,76 +104,33 @@ const Projects = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </AnimatePresence>
         </div>
 
-        {/* More Projects Section */}
-        <div ref={moreRef} className="mt-16">
+        {/* Show More Button */}
+        {moreProjects.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={moreInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="flex justify-center mt-12"
           >
-            <h3 className="text-2xl md:text-3xl font-bold text-center mb-3">
-              More <span className="gradient-text">Projects</span>
-            </h3>
-            <div className="w-16 h-1 bg-primary/60 mx-auto mb-3 rounded-full" />
-            <p className="text-center text-muted-foreground text-sm mb-10">
-              Additional projects and experiments
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto">
-            {moreProjects.map((project, i) => (
+            <motion.button
+              onClick={() => setShowMore(!showMore)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 rounded-xl glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 hover:bg-primary/5 group"
+            >
+              {showMore ? "Show Less Projects" : "Show More Projects"}
               <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={moreInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ 
-                  delay: 0.1 + i * 0.1,
-                  duration: 0.4,
-                  ease: "easeOut"
-                }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="glass rounded-xl p-5 hover:glow-border transition-all duration-300 group"
+                animate={{ rotate: showMore ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h4 className="text-base md:text-lg font-bold text-foreground group-hover:text-primary transition-colors flex-1">
-                    {project.title}
-                  </h4>
-                  {project.githubUrl && project.githubUrl !== "#" && (
-                    <motion.a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-all ml-2"
-                      aria-label="GitHub Repository"
-                    >
-                      <Github size={18} />
-                    </motion.a>
-                  )}
-                </div>
-                
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2">
-                  {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium border border-primary/20"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                <ChevronDown size={20} className="group-hover:text-primary transition-colors" />
               </motion.div>
-            ))}
-          </div>
-        </div>
+            </motion.button>
+          </motion.div>
+        )}
       </div>
     </section>
   );
