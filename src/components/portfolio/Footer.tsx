@@ -1,4 +1,4 @@
-import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
@@ -50,7 +50,23 @@ const Footer = () => {
               <p className="text-sm text-muted-foreground mb-3">
                 MERN Stack Developer
               </p>
-              <p className="text-xs text-muted-foreground/70 leading-relaxed max-w-xs mx-auto sm:mx-0">
+              <div className="space-y-2">
+                <a 
+                  href="mailto:vivekranaworks@gmail.com"
+                  className="flex items-center justify-center sm:justify-start gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Mail size={14} />
+                  <span>vivekranaworks@gmail.com</span>
+                </a>
+                <a 
+                  href="tel:+919304718075"
+                  className="flex items-center justify-center sm:justify-start gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Phone size={14} />
+                  <span>+91 9304718075</span>
+                </a>
+              </div>
+              <p className="text-xs text-muted-foreground/70 leading-relaxed max-w-xs mx-auto sm:mx-0 mt-3">
                 Building modern web applications with passion and precision. Turning ideas into production-ready solutions.
               </p>
             </motion.div>

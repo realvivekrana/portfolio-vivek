@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, Github, Linkedin, Twitter, MapPin, Mail as MailIcon } from "lucide-react";
+import { Send, Github, Linkedin, Twitter, MapPin, Mail as MailIcon, Phone } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
@@ -81,6 +81,15 @@ const Contact = () => {
                   className="hover:text-primary transition-colors"
                 >
                   vivekranaworks@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <Phone size={18} className="text-primary" />
+                <a 
+                  href="tel:+919304718075"
+                  className="hover:text-primary transition-colors"
+                >
+                  +91 9304718075
                 </a>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
