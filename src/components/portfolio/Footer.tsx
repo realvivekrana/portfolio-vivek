@@ -155,7 +155,7 @@ const Footer = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="w-full h-[150px] lg:h-[180px] rounded-lg overflow-hidden shadow-md border border-border/50"
+              className="w-full h-[140px] sm:h-[150px] lg:h-[160px] rounded-lg overflow-hidden shadow-md border border-border/50"
             >
               <iframe
                 src="https://maps.google.com/maps?q=Noida%20Uttar%20Pradesh&t=&z=13&ie=UTF8&iwloc=&output=embed"

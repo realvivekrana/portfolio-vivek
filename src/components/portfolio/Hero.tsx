@@ -169,7 +169,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="order-1 lg:order-2 hidden md:block"
+            className="order-1 lg:order-2"
           >
             <div className="relative max-w-md mx-auto lg:max-w-none">
               <div className="relative rounded-2xl overflow-hidden glass-strong p-4">
