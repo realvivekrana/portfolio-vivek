@@ -1,0 +1,49 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="150" fill="#06b6d4" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="200" fill="#8b5cf6" opacity="0.1"/>
+  
+  <!-- Code brackets decoration -->
+  <text x="50" y="100" font-family="monospace" font-size="120" fill="#06b6d4" opacity="0.3">&lt;</text>
+  <text x="1100" y="550" font-family="monospace" font-size="120" fill="#8b5cf6" opacity="0.3">/&gt;</text>
+  
+  <!-- Main content -->
+  <g>
+    <!-- Name -->
+    <text x="600" y="250" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      Vivek Rana
+    </text>
+    
+    <!-- Title with gradient -->
+    <text x="600" y="330" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="url(#accentGradient)" text-anchor="middle">
+      Frontend Developer
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="600" y="400" font-family="Arial, sans-serif" font-size="28" fill="#94a3b8" text-anchor="middle">
+      React • JavaScript • MERN Stack
+    </text>
+    
+    <!-- Location -->
+    <text x="600" y="480" font-family="Arial, sans-serif" font-size="24" fill="#64748b" text-anchor="middle">
+      📍 Noida, India
+    </text>
+  </g>
+  
+  <!-- Bottom accent line -->
+  <rect x="300" y="550" width="600" height="4" fill="url(#accentGradient)" rx="2"/>
+</svg>

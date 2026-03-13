@@ -12,7 +12,7 @@ export const personalInfo = {
   name: "Vivek Kumar Rana",
   title: "MERN Full Stack Developer",
   email: "vivekranaworks@gmail.com",
-  location: "India",
+  location: "Noida, Uttar Pradesh, India",
   bio: "Passionate MERN Full Stack Developer crafting scalable web applications with React, Node.js, Express.js, and MongoDB. Turning ideas into production-ready solutions.",
   profileImage: "/src/assets/vivek-profile.jpg",
   resumePath: "/Vivek-Kumar-Rana-Resume.pdf",

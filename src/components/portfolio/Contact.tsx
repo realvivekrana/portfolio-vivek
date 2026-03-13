@@ -67,7 +67,7 @@ const Contact = () => {
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin size={18} className="text-primary" />
-                <span>India</span>
+                <span>Noida, Uttar Pradesh, India</span>
               </div>
             </div>
 
