@@ -79,15 +79,15 @@ const Hero = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
-            {/* Profile Image - Mobile Only */}
+            {/* Profile Photo - Visible on All Devices */}
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6, type: "spring" }}
-              className="mb-8 lg:hidden flex justify-center"
+              className="mb-8 flex justify-center"
             >
               <div className="relative">
-                <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-primary/50 animate-pulse-glow">
+                <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-primary/50 animate-pulse-glow">
                   <img
                     src={profileImg}
                     alt="Vivek Kumar Rana - MERN Full Stack Developer"
@@ -164,12 +164,12 @@ const Hero = () => {
             </motion.div>
           </div>
 
-          {/* Right side - Developer Image */}
+          {/* Right side - Developer Illustration (Hidden on Mobile) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="order-1 lg:order-2"
+            className="order-1 lg:order-2 hidden md:block"
           >
             <div className="relative max-w-md mx-auto lg:max-w-none">
               <div className="relative rounded-2xl overflow-hidden glass-strong p-4">
