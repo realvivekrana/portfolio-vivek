@@ -43,12 +43,30 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-10">
+          {/* Image - Desktop */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+            className="hidden md:block"
+          >
+            <div className="relative rounded-2xl overflow-hidden glass p-4 h-full">
+              <img
+                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=600&fit=crop"
+                alt="Contact illustration"
+                className="w-full h-full object-cover rounded-xl"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+            </div>
+          </motion.div>
+
           {/* Info */}
           <motion.div
             initial={{ opacity: 0, x: -30, scale: 0.95 }}
             animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-            className="space-y-6"
+            className="space-y-6 md:order-2"
           >
             <h3 className="text-xl font-bold text-foreground">Let's work together</h3>
             <p className="text-muted-foreground leading-relaxed">
@@ -86,58 +104,6 @@ const Contact = () => {
               ))}
             </div>
           </motion.div>
-
-          {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, x: 30, scale: 0.95 }}
-            animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-            onSubmit={handleSubmit}
-            className="glass rounded-2xl p-6 space-y-5"
-          >
-            <div>
-              <label htmlFor="name" className="text-sm font-medium text-foreground mb-1.5 block">Name</label>
-              <input
-                id="name"
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                maxLength={100}
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
-                placeholder="Your name"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="text-sm font-medium text-foreground mb-1.5 block">Email</label>
-              <input
-                id="email"
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                maxLength={255}
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
-                placeholder="your@email.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="text-sm font-medium text-foreground mb-1.5 block">Message</label>
-              <textarea
-                id="message"
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                maxLength={1000}
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all resize-none"
-                placeholder="Your message..."
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 flex items-center justify-center gap-2"
-            >
-              <Send size={18} /> Send Message
-            </button>
-          </motion.form>
         </div>
       </div>
     </section>

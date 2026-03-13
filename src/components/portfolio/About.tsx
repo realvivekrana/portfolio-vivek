@@ -27,13 +27,31 @@ const About = () => {
           <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Text */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+          {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="space-y-5"
+            className="md:col-span-2 lg:col-span-1"
+          >
+            <div className="relative rounded-2xl overflow-hidden glass p-4">
+              <img
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop"
+                alt="Developer workspace"
+                className="w-full h-auto rounded-xl object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+            </div>
+          </motion.div>
+
+          {/* Text */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+            className="space-y-5 md:col-span-2 lg:col-span-1"
           >
             <p className="text-muted-foreground leading-relaxed">
               I'm a <span className="text-primary font-semibold">MERN Full Stack Developer</span> with a
@@ -63,10 +81,10 @@ const About = () => {
 
           {/* Highlight cards */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            className="space-y-4"
+            className="space-y-4 md:col-span-2 lg:col-span-1"
           >
             {highlights.map((item, i) => (
               <motion.div
