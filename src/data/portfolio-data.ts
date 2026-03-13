@@ -66,7 +66,7 @@ export const projects = [
   {
     title: "ChatMate AI Assistant",
     description: "AI powered chat assistant web application with modern UI and real-time messaging experience.",
-    image: "/images/projects/chatmate.svg",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
     tech: ["React", "JavaScript", "API", "Tailwind CSS"],
     liveUrl: "https://realvivekrana.github.io/chatmate-ai-assistant/",
     githubUrl: "https://github.com/realvivekrana/chatmate-ai-assistant",
@@ -74,7 +74,7 @@ export const projects = [
   {
     title: "Sunny Skies Weather App",
     description: "Weather dashboard built with React that displays real-time weather data using weather APIs with a clean responsive UI.",
-    image: "/images/projects/weather.svg",
+    image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop",
     tech: ["React", "Weather API", "JavaScript", "CSS"],
     liveUrl: "#",
     githubUrl: "https://github.com/realvivekrana/sunny-skies-app",
@@ -82,7 +82,7 @@ export const projects = [
   {
     title: "AdminSuite Pro React Dashboard",
     description: "Professional admin dashboard with analytics cards, charts, and responsive UI built with React.",
-    image: "/images/projects/admin.svg",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
     tech: ["React", "Charts", "Tailwind CSS", "JavaScript"],
     liveUrl: "https://realvivekrana.github.io/adminsuite-pro-react-dashboard/",
     githubUrl: "https://github.com/realvivekrana/adminsuite-pro-react-dashboard",
