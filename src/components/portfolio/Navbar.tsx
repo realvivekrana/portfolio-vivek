@@ -8,9 +8,6 @@ const navLinks = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Education", href: "#education" },
-  { label: "Certificates", href: "#certificates" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -168,31 +165,31 @@ const Navbar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden"
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-background/95 backdrop-blur-md md:hidden z-40"
               onClick={() => setIsOpen(false)}
             />
             
             {/* Menu */}
             <motion.div
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-64 glass-strong md:hidden shadow-2xl"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-16 left-4 right-4 glass-strong md:hidden shadow-2xl rounded-2xl z-50 overflow-hidden"
             >
-              <div className="flex flex-col h-full pt-20 pb-8 px-6">
-                <ul className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col py-4 px-2">
+                <ul className="flex flex-col gap-1">
                   {navLinks.map((link, i) => (
                     <motion.li
                       key={link.href}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
                     >
                       <button
                         onClick={() => handleClick(link.href)}
-                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+                        className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
                           activeSection === link.href.slice(1)
                             ? "text-primary bg-primary/10 glow-border"
                             : "text-muted-foreground hover:text-primary hover:bg-primary/5"
@@ -203,18 +200,6 @@ const Navbar = () => {
                     </motion.li>
                   ))}
                 </ul>
-                
-                {/* Mobile menu footer */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="pt-6 border-t border-border"
-                >
-                  <p className="text-xs text-muted-foreground text-center">
-                    © 2026 Vivek Kumar Rana
-                  </p>
-                </motion.div>
               </div>
             </motion.div>
           </>

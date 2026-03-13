@@ -1,0 +1,288 @@
+/* Navbar - Responsive with Proper Mobile Toggle */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  padding: 16px 0;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  z-index: 1001;
+  position: relative;
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Desktop Navigation Menu */
+.nav-menu {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-menu a {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-menu a:hover {
+  color: var(--accent-primary);
+}
+
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-primary);
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* Nav Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 1001;
+}
+
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-cta:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Hamburger Toggle Button - Hidden on Desktop */
+.hamburger-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: relative;
+}
+
+.hamburger-toggle:hover {
+  background: var(--bg-secondary);
+}
+
+.hamburger-toggle:active {
+  transform: scale(0.95);
+}
+
+.hamburger-toggle svg {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.hamburger-toggle:hover svg {
+  color: var(--accent-primary);
+}
+
+/* Backdrop - Hidden by default */
+.nav-backdrop {
+  display: none;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE (Below 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 0;
+  }
+
+  .nav-container {
+    padding: 0 16px;
+  }
+
+  .nav-logo {
+    font-size: 24px;
+  }
+
+  /* Mobile Navigation Menu - Hidden by default */
+  .nav-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 0;
+    background: var(--bg-primary);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 999;
+  }
+
+  /* Show menu when active */
+  .nav-menu.active {
+    max-height: calc(100vh - 60px);
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Mobile menu links */
+  .nav-menu a {
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-light);
+    display: block;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  /* Animate links when menu is active */
+  .nav-menu.active a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-menu.active a:nth-child(1) { transition-delay: 0.05s; }
+  .nav-menu.active a:nth-child(2) { transition-delay: 0.1s; }
+  .nav-menu.active a:nth-child(3) { transition-delay: 0.15s; }
+  .nav-menu.active a:nth-child(4) { transition-delay: 0.2s; }
+  .nav-menu.active a:nth-child(5) { transition-delay: 0.25s; }
+  .nav-menu.active a:nth-child(6) { transition-delay: 0.3s; }
+  .nav-menu.active a:nth-child(7) { transition-delay: 0.35s; }
+
+  .nav-menu a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-menu a::after {
+    display: none;
+  }
+
+  /* Hide desktop CTA button */
+  .nav-cta {
+    display: none;
+  }
+
+  /* Show hamburger toggle button */
+  .hamburger-toggle {
+    display: flex;
+  }
+
+  /* Show backdrop when menu is open */
+  .nav-backdrop {
+    display: block;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .nav-logo {
+    font-size: 20px;
+  }
+
+  .nav-menu a {
+    font-size: 15px;
+    padding: 14px 16px;
+  }
+
+  .hamburger-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .hamburger-toggle svg {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    min-height: 22px;
+  }
+}

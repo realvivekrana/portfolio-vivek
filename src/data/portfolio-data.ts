@@ -60,24 +60,50 @@ export const skills = {
 };
 
 // ============================================
-// PROJECTS
+// FEATURED PROJECTS
 // ============================================
 export const projects = [
   {
-    title: "E-Commerce Website (Full Stack)",
-    description: "A modern full-stack e-commerce platform with product listing, shopping cart, authentication system, and responsive user interface built with MERN stack.",
-    image: "/src/assets/project-ecommerce.jpg",
-    tech: ["React", "Node.js", "Express.js", "MongoDB"],
-    liveUrl: "#", // Update with actual URL
-    githubUrl: "#", // Update with actual GitHub repo URL
+    title: "ChatMate AI Assistant",
+    description: "AI powered chat assistant web application with modern UI and real-time messaging experience.",
+    image: "/project-chatmate.svg",
+    tech: ["React", "JavaScript", "API", "Tailwind CSS"],
+    liveUrl: "https://realvivekrana.github.io/chatmate-ai-assistant/",
+    githubUrl: "https://github.com/realvivekrana/chatmate-ai-assistant",
   },
-  // Add more projects here:
+  {
+    title: "Sunny Skies Weather App",
+    description: "Weather dashboard built with React that displays real-time weather data using weather APIs with a clean responsive UI.",
+    image: "/project-weather.svg",
+    tech: ["React", "Weather API", "JavaScript", "CSS"],
+    liveUrl: "#",
+    githubUrl: "https://github.com/realvivekrana/sunny-skies-app",
+  },
+  {
+    title: "AdminSuite Pro React Dashboard",
+    description: "Professional admin dashboard with analytics cards, charts, and responsive UI built with React.",
+    image: "/project-dashboard.svg",
+    tech: ["React", "Charts", "Tailwind CSS", "JavaScript"],
+    liveUrl: "https://realvivekrana.github.io/adminsuite-pro-react-dashboard/",
+    githubUrl: "https://github.com/realvivekrana/adminsuite-pro-react-dashboard",
+  },
+];
+
+// ============================================
+// MORE PROJECTS
+// ============================================
+export const moreProjects = [
+  {
+    title: "E-Commerce Website (Full Stack)",
+    description: "Modern MERN stack ecommerce platform with product listing, shopping cart, authentication system, and responsive user interface.",
+    tech: ["React", "Node.js", "Express.js", "MongoDB"],
+    githubUrl: "#",
+  },
+  // Add more projects here following the same structure:
   // {
   //   title: "Your Project Name",
-  //   description: "Project description",
-  //   image: "/src/assets/your-project-image.jpg",
-  //   tech: ["React", "TypeScript", "etc"],
-  //   liveUrl: "https://your-project.com",
+  //   description: "Brief project description",
+  //   tech: ["Tech1", "Tech2", "Tech3"],
   //   githubUrl: "https://github.com/yourusername/repo",
   // },
 ];
