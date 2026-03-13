@@ -32,18 +32,21 @@ const Footer = () => {
       {/* Glass Background */}
       <div className="glass-strong backdrop-blur-xl">
         <div className="container mx-auto px-4 py-12 md:py-16">
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
-            
-            {/* Left Section - Name & Role */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center sm:text-left"
-            >
-              <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {/* Left side - Footer Content */}
+            <div>
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                {/* Left Section - Name & Role */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center sm:text-left"
+                >
+                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
                 <Code2 className="text-primary" size={24} />
                 <h3 className="text-xl font-bold gradient-text">Vivek Rana</h3>
               </div>
@@ -142,6 +145,27 @@ const Footer = () => {
                   </motion.a>
                 ))}
               </div>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Right side - Google Map */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="w-full h-[150px] lg:h-[180px] rounded-lg overflow-hidden shadow-md border border-border/50"
+            >
+              <iframe
+                src="https://maps.google.com/maps?q=Noida%20Uttar%20Pradesh&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                title="Location Map - Noida, Uttar Pradesh"
+                className="rounded-lg"
+              />
             </motion.div>
           </div>
 

@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Briefcase, Code2 } from "lucide-react";
+import { Briefcase, Code2, MapPin, Calendar } from "lucide-react";
 
 // EXPERIENCE CONFIGURATION - Update your work experience here
 const experiences = [
@@ -36,7 +36,7 @@ const Experience = () => {
 
   return (
     <section id="experience" className="section-padding relative">
-      <div className="container mx-auto max-w-4xl" ref={ref}>
+      <div className="container mx-auto max-w-5xl" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -45,64 +45,84 @@ const Experience = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             Work <span className="gradient-text">Experience</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
+          <div className="w-20 h-1 bg-primary mx-auto mb-16 rounded-full" />
         </motion.div>
 
-        {/* Timeline */}
+        {/* Vertical Timeline */}
         <div className="relative">
-          {/* Center line */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
+          {/* Vertical Line */}
+          <div className="absolute left-4 md:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-transparent" />
 
-          {experiences.map((item, i) => (
-            <motion.div
-              key={item.title + item.company}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ 
-                delay: 0.2 + i * 0.15,
-                duration: 0.5,
-                ease: "easeOut"
-              }}
-              className={`relative flex items-start gap-6 mb-12 ${
-                i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-              }`}
-            >
-              {/* Animated Dot */}
-              <motion.div 
-                initial={{ scale: 0 }}
-                animate={inView ? { scale: 1 } : {}}
-                transition={{ delay: 0.3 + i * 0.15, type: "spring", stiffness: 200 }}
-                className="absolute left-6 md:left-1/2 w-3 h-3 rounded-full bg-primary -translate-x-1.5 mt-5 z-10 animate-pulse-glow" 
-              />
-
-              {/* Spacer for desktop */}
-              <div className="hidden md:block md:w-1/2" />
-
-              {/* Card */}
-              <div className="ml-14 md:ml-0 md:w-1/2">
+          <div className="space-y-8 md:space-y-12">
+            {experiences.map((item, i) => (
+              <motion.div
+                key={item.title + item.company}
+                initial={{ opacity: 0, x: -30 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ 
+                  delay: 0.2 + i * 0.15,
+                  duration: 0.6,
+                  ease: "easeOut"
+                }}
+                className="relative pl-12 md:pl-20"
+              >
+                {/* Timeline Dot with Icon */}
                 <motion.div 
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="glass rounded-xl p-5 hover:glow-border transition-all duration-300"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={inView ? { scale: 1, rotate: 0 } : {}}
+                  transition={{ 
+                    delay: 0.3 + i * 0.15, 
+                    type: "spring", 
+                    stiffness: 200,
+                    damping: 10
+                  }}
+                  className="absolute left-0 md:left-3 top-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/30 z-10"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <motion.div 
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                      className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"
-                    >
-                      <item.icon className="text-primary" size={20} />
-                    </motion.div>
-                    <span className="text-sm text-primary font-mono font-bold">{item.year}</span>
-                  </div>
-                  <h3 className="font-bold text-foreground mb-1">{item.title}</h3>
-                  <p className="text-sm text-primary/80 font-medium mb-1">{item.company}</p>
-                  <p className="text-xs text-muted-foreground mb-3">{item.location}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                  <item.icon className="text-primary-foreground" size={16} />
                 </motion.div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Experience Card */}
+                <motion.div 
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="glass rounded-2xl p-6 md:p-8 hover:glow-border transition-all duration-300 group"
+                >
+                  {/* Date Badge */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.4 + i * 0.15 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-mono font-bold mb-4"
+                  >
+                    <Calendar size={14} />
+                    {item.year}
+                  </motion.div>
+
+                  {/* Title & Company */}
+                  <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-base md:text-lg text-primary/90 font-semibold mb-3">
+                    {item.company}
+                  </p>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                    <MapPin size={16} className="text-primary/70" />
+                    <span>{item.location}</span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+
+                  {/* Decorative Element */}
+                  <div className="absolute top-6 right-6 w-20 h-20 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all duration-300" />
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -1,38 +1,31 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
+type Skill = {
+  name: string;
+  level: number;
+  icon?: string;
+};
+
 type SkillCategory = {
   title: string;
-  skills: { name: string; level: number }[];
+  skills: Skill[];
 };
 
 // SKILLS CONFIGURATION - Update your skills here
-const categories: SkillCategory[] = [
-  {
-    title: "Frontend",
-    skills: [
-      { name: "HTML", level: 90 },
-      { name: "CSS", level: 85 },
-      { name: "JavaScript", level: 85 },
-      { name: "React + Vite", level: 80 },
-      { name: "Bootstrap", level: 80 },
-      { name: "Tailwind CSS", level: 85 },
-    ],
-  },
-  {
-    title: "Backend",
-    skills: [
-      { name: "Node.js", level: 80 },
-      { name: "Express.js", level: 80 },
-    ],
-  },
-  {
-    title: "Database",
-    skills: [
-      { name: "MongoDB", level: 75 },
-      { name: "SQL", level: 70 },
-    ],
-  },
+const allSkills = [
+  { name: "HTML", level: 90, icon: "🌐" },
+  { name: "CSS", level: 85, icon: "🎨" },
+  { name: "JavaScript", level: 85, icon: "⚡" },
+  { name: "React", level: 80, icon: "⚛️" },
+  { name: "Vite", level: 80, icon: "⚡" },
+  { name: "Bootstrap", level: 80, icon: "🅱️" },
+  { name: "Tailwind CSS", level: 85, icon: "💨" },
+  { name: "Node.js", level: 80, icon: "🟢" },
+  { name: "Express.js", level: 80, icon: "🚂" },
+  { name: "MongoDB", level: 75, icon: "🍃" },
+  { name: "SQL", level: 70, icon: "🗄️" },
+  { name: "Git", level: 75, icon: "📦" },
 ];
 
 const Skills = () => {
@@ -50,44 +43,41 @@ const Skills = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             My <span className="gradient-text">Skills</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
+          <div className="w-20 h-1 bg-primary mx-auto mb-4 rounded-full" />
+          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
+            Technologies and tools I work with to build amazing web applications
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {categories.map((cat, ci) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
+          {allSkills.map((skill, i) => (
             <motion.div
-              key={cat.title}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              key={skill.name}
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
               transition={{ 
-                delay: 0.2 + ci * 0.15,
-                duration: 0.5,
+                delay: 0.1 + i * 0.05,
+                duration: 0.4,
                 ease: "easeOut"
               }}
-              whileHover={{ scale: 1.03, y: -5 }}
-              className="glass rounded-2xl p-6 hover:glow-border transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="glass rounded-xl p-4 md:p-6 hover:glow-border transition-all duration-300 group text-center"
             >
-              <h3 className="text-lg font-bold text-primary mb-6 font-mono">
-                {`// ${cat.title}`}
-              </h3>
-              <div className="space-y-5">
-                {cat.skills.map((skill, si) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between text-sm mb-1.5">
-                      <span className="text-foreground font-medium">{skill.name}</span>
-                      <span className="text-muted-foreground">{skill.level}%</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={inView ? { width: `${skill.level}%` } : {}}
-                        transition={{ duration: 1, delay: 0.4 + ci * 0.15 + si * 0.1, ease: "easeOut" }}
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div className="text-4xl md:text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                {skill.icon}
               </div>
+              <h3 className="text-sm md:text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                {skill.name}
+              </h3>
+              <div className="w-full bg-secondary rounded-full h-1.5 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={inView ? { width: `${skill.level}%` } : {}}
+                  transition={{ duration: 1, delay: 0.3 + i * 0.05, ease: "easeOut" }}
+                  className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">{skill.level}%</p>
             </motion.div>
           ))}
         </div>

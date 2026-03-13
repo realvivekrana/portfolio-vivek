@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Code2, Palette, Zap, MapPin } from "lucide-react";
+import { Code2, Palette, Zap } from "lucide-react";
 
 const highlights = [
   { icon: Code2, label: "Clean Code", desc: "Writing maintainable, scalable code" },
@@ -72,11 +72,6 @@ const About = () => {
               training in MERN stack development and built multiple full-stack projects. When I'm not coding, 
               you can find me exploring new technologies and contributing to open-source projects.
             </p>
-            
-            <div className="flex items-center gap-2 text-muted-foreground mt-4">
-              <MapPin size={18} className="text-primary" />
-              <span className="text-sm">Noida, Uttar Pradesh, India</span>
-            </div>
           </motion.div>
 
           {/* Highlight cards */}

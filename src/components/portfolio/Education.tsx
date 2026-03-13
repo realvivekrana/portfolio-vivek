@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { GraduationCap, Award } from "lucide-react";
+import { GraduationCap, Award, MapPin, Trophy } from "lucide-react";
 
 // EDUCATION CONFIGURATION - Update your education here
 const education = [
@@ -12,6 +12,7 @@ const education = [
     location: "Jharkhand",
     grade: "81.20%",
     description: "Completed secondary education with strong academic performance.",
+    gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
     icon: GraduationCap,
@@ -21,6 +22,7 @@ const education = [
     location: "Hazaribagh",
     grade: "65%",
     description: "Focused on Physics, Chemistry, and Mathematics stream.",
+    gradient: "from-purple-500/20 to-pink-500/20",
   },
   {
     icon: Award,
@@ -30,15 +32,17 @@ const education = [
     location: "Hazaribagh",
     grade: "CGPA: 6.86",
     description: "Studied programming, data structures, DBMS, operating systems, and web development.",
+    gradient: "from-orange-500/20 to-red-500/20",
   },
   {
-    icon: GraduationCap,
+    icon: Trophy,
     year: "Jul 2024 - Aug 2026",
     title: "Master of Computer Applications (MCA)",
     institution: "Amity University Online",
     location: "Online",
     grade: "Currently Pursuing",
     description: "Specialization in Artificial Intelligence and Machine Learning. Focus on AI, ML, DSA, DBMS, Python Programming, and Software Engineering.",
+    gradient: "from-green-500/20 to-emerald-500/20",
   },
 ];
 
@@ -48,7 +52,7 @@ const Education = () => {
 
   return (
     <section id="education" className="section-padding relative">
-      <div className="container mx-auto max-w-4xl" ref={ref}>
+      <div className="container mx-auto max-w-6xl" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -57,66 +61,79 @@ const Education = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             <span className="gradient-text">Education</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
+          <div className="w-20 h-1 bg-primary mx-auto mb-16 rounded-full" />
         </motion.div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Center line */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
-
+        {/* Modern Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {education.map((item, i) => (
             <motion.div
               key={item.title + item.institution}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              initial={{ opacity: 0, y: 30, scale: 0.9 }}
               animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
               transition={{ 
-                delay: 0.2 + i * 0.15,
-                duration: 0.5,
+                delay: 0.1 + i * 0.1,
+                duration: 0.6,
                 ease: "easeOut"
               }}
-              className={`relative flex items-start gap-6 mb-12 ${
-                i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-              }`}
             >
-              {/* Animated Dot */}
               <motion.div 
-                initial={{ scale: 0 }}
-                animate={inView ? { scale: 1 } : {}}
-                transition={{ delay: 0.3 + i * 0.15, type: "spring", stiffness: 200 }}
-                className="absolute left-6 md:left-1/2 w-3 h-3 rounded-full bg-primary -translate-x-1.5 mt-5 z-10 animate-pulse-glow" 
-              />
-
-              {/* Spacer for desktop */}
-              <div className="hidden md:block md:w-1/2" />
-
-              {/* Card */}
-              <div className="ml-14 md:ml-0 md:w-1/2">
-                <motion.div 
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="glass rounded-xl p-5 hover:glow-border transition-all duration-300"
-                >
-                  <div className="flex items-center gap-3 mb-3">
+                whileHover={{ scale: 1.03, y: -8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className={`relative glass rounded-2xl p-6 md:p-8 h-full hover:glow-border transition-all duration-300 group overflow-hidden`}
+              >
+                {/* Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Icon & Year */}
+                  <div className="flex items-start justify-between mb-4">
                     <motion.div 
-                      whileHover={{ rotate: 360 }}
+                      whileHover={{ rotate: 360, scale: 1.1 }}
                       transition={{ duration: 0.6 }}
-                      className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"
+                      className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-300"
                     >
-                      <item.icon className="text-primary" size={20} />
+                      <item.icon className="text-primary" size={28} />
                     </motion.div>
-                    <span className="text-sm text-primary font-mono font-bold">{item.year}</span>
+                    
+                    <div className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold">
+                      {item.year}
+                    </div>
                   </div>
-                  <h3 className="font-bold text-foreground mb-1">{item.title}</h3>
-                  <p className="text-sm text-primary/80 font-medium mb-1">{item.institution}</p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                    <span>{item.location}</span>
-                    <span>•</span>
-                    <span className="text-primary/70 font-semibold">{item.grade}</span>
+
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+
+                  {/* Institution */}
+                  <p className="text-sm md:text-base text-primary/90 font-semibold mb-3">
+                    {item.institution}
+                  </p>
+
+                  {/* Location & Grade */}
+                  <div className="flex flex-wrap items-center gap-3 mb-4 text-xs md:text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin size={14} className="text-primary/70" />
+                      <span>{item.location}</span>
+                    </div>
+                    <span className="text-primary/50">•</span>
+                    <div className="flex items-center gap-1.5">
+                      <Trophy size={14} className="text-primary/70" />
+                      <span className="text-primary/90 font-semibold">{item.grade}</span>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                </motion.div>
-              </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Decorative Corner Element */}
+                <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500" />
+              </motion.div>
             </motion.div>
           ))}
         </div>
