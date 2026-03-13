@@ -35,7 +35,7 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="md:col-span-2 lg:col-span-1"
           >
-            <div className="relative rounded-2xl overflow-hidden glass p-4">
+            <div className="relative rounded-2xl overflow-hidden glass p-4 max-w-md mx-auto lg:max-w-none">
               <img
                 src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop"
                 alt="Developer workspace"

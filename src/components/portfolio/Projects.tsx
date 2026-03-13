@@ -39,7 +39,7 @@ const Projects = () => {
               className="glass rounded-2xl overflow-hidden group hover:glow-border transition-all duration-500 hover:shadow-2xl"
             >
               {/* Image */}
-              <div className="relative overflow-hidden h-48 md:h-56 bg-gradient-to-br from-primary/5 to-accent/5">
+              <div className="relative overflow-hidden h-48 sm:h-56 bg-gradient-to-br from-primary/5 to-accent/5">
                 <img
                   src={project.image}
                   alt={project.title}

@@ -43,18 +43,18 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Image - Desktop */}
+          {/* Image - Shows on all devices */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-            className="hidden md:block"
+            className="order-1 md:order-1"
           >
-            <div className="relative rounded-2xl overflow-hidden glass p-4 h-full">
+            <div className="relative rounded-2xl overflow-hidden glass p-4 h-full max-w-sm mx-auto md:max-w-none">
               <img
                 src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=600&fit=crop"
                 alt="Contact illustration"
-                className="w-full h-full object-cover rounded-xl"
+                className="w-full h-auto object-cover rounded-xl"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
@@ -66,7 +66,7 @@ const Contact = () => {
             initial={{ opacity: 0, x: -30, scale: 0.95 }}
             animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-            className="space-y-6 md:order-2"
+            className="space-y-6 order-2 md:order-2"
           >
             <h3 className="text-xl font-bold text-foreground">Let's work together</h3>
             <p className="text-muted-foreground leading-relaxed">
