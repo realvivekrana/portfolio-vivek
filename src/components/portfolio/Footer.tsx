@@ -21,7 +21,7 @@ const Footer = () => {
     { icon: Github, href: "https://github.com/realvivekrana", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
     { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter" },
-    { icon: Mail, href: "mailto:vivekrana@example.com", label: "Email" },
+    { icon: Mail, href: "mailto:vivekranaworks@gmail.com", label: "Email" },
   ];
 
   return (

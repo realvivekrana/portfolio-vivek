@@ -11,7 +11,7 @@
 export const personalInfo = {
   name: "Vivek Kumar Rana",
   title: "MERN Full Stack Developer",
-  email: "vivekrana@example.com", // Update with your actual email
+  email: "vivekranaworks@gmail.com",
   location: "India",
   bio: "Passionate MERN Full Stack Developer crafting scalable web applications with React, Node.js, Express.js, and MongoDB. Turning ideas into production-ready solutions.",
   profileImage: "/src/assets/vivek-profile.jpg",
@@ -60,13 +60,13 @@ export const skills = {
 };
 
 // ============================================
-// FEATURED PROJECTS (Initially visible)
+// FEATURED PROJECTS
 // ============================================
 export const projects = [
   {
     title: "ChatMate AI Assistant",
     description: "AI powered chat assistant web application with modern UI and real-time messaging experience.",
-    image: "/project-chatmate.svg",
+    image: "/images/projects/chatmate.svg",
     tech: ["React", "JavaScript", "API", "Tailwind CSS"],
     liveUrl: "https://realvivekrana.github.io/chatmate-ai-assistant/",
     githubUrl: "https://github.com/realvivekrana/chatmate-ai-assistant",
@@ -74,7 +74,7 @@ export const projects = [
   {
     title: "Sunny Skies Weather App",
     description: "Weather dashboard built with React that displays real-time weather data using weather APIs with a clean responsive UI.",
-    image: "/project-weather.svg",
+    image: "/images/projects/weather.svg",
     tech: ["React", "Weather API", "JavaScript", "CSS"],
     liveUrl: "#",
     githubUrl: "https://github.com/realvivekrana/sunny-skies-app",
@@ -82,7 +82,7 @@ export const projects = [
   {
     title: "AdminSuite Pro React Dashboard",
     description: "Professional admin dashboard with analytics cards, charts, and responsive UI built with React.",
-    image: "/project-dashboard.svg",
+    image: "/images/projects/admin.svg",
     tech: ["React", "Charts", "Tailwind CSS", "JavaScript"],
     liveUrl: "https://realvivekrana.github.io/adminsuite-pro-react-dashboard/",
     githubUrl: "https://github.com/realvivekrana/adminsuite-pro-react-dashboard",
@@ -90,17 +90,9 @@ export const projects = [
 ];
 
 // ============================================
-// ADDITIONAL PROJECTS (Show on "Show More" click)
+// ADDITIONAL PROJECTS (for future use)
 // ============================================
-export const moreProjects = [
-  {
-    title: "E-Commerce Website (Full Stack)",
-    description: "Modern MERN stack ecommerce platform with product listing, shopping cart, authentication system, and responsive user interface.",
-    image: "/project-ecommerce.svg",
-    tech: ["React", "Node.js", "Express.js", "MongoDB"],
-    liveUrl: "#",
-    githubUrl: "#",
-  },
+export const moreProjects: typeof projects = [
   // Add more projects here following the same structure:
   // {
   //   title: "Your Project Name",

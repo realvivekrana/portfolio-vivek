@@ -58,7 +58,12 @@ const Contact = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MailIcon size={18} className="text-primary" />
-                <span>vivekrana@example.com</span>
+                <a 
+                  href="mailto:vivekranaworks@gmail.com"
+                  className="hover:text-primary transition-colors"
+                >
+                  vivekranaworks@gmail.com
+                </a>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin size={18} className="text-primary" />
