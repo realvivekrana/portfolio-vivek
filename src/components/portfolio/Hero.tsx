@@ -39,20 +39,20 @@ const Hero = () => {
   // Prevent body scroll when mobile sheet is open
   useEffect(() => {
     if (isMobile && showResumeDropdown) {
-      document.body.style.overflow = 'hidden';
+      const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
     }
-    
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    };
   }, [isMobile, showResumeDropdown]);
 
   const handleViewResume = () => {
@@ -208,140 +208,146 @@ const Hero = () => {
                 <ExternalLink size={18} /> View Projects
               </button>
               
-              {/* Resume Button with Container */}
-              <div className="relative w-full sm:w-auto inline-block">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowResumeDropdown(!showResumeDropdown);
-                  }}
-                  className="w-full sm:w-auto min-w-[180px] px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5 active:scale-95 touch-manipulation"
-                  aria-label="Resume options"
-                  aria-expanded={showResumeDropdown}
-                  type="button"
-                >
-                  <Download size={18} />
-                  <span>Resume</span>
-                  <ChevronDown 
-                    size={16} 
-                    className={`transition-transform duration-300 ${showResumeDropdown ? 'rotate-180' : ''}`}
-                  />
-                </button>
-
-                {/* Desktop Dropdown */}
-                {!isMobile && showResumeDropdown && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full mt-2 left-0 w-full min-w-[220px] glass rounded-lg border border-border/50 shadow-xl overflow-hidden z-[100]"
-                    onMouseDown={(e) => e.preventDefault()}
-                  >
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleViewResume();
-                      }}
-                      className="w-full px-5 py-3.5 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
-                      aria-label="View resume in new tab"
-                      type="button"
-                    >
-                      <Eye size={18} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
-                      <span className="text-sm font-medium">View Resume</span>
-                    </button>
-                    <div className="h-px bg-border/50" />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDownloadResume();
-                      }}
-                      className="w-full px-5 py-3.5 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
-                      aria-label="Download resume PDF"
-                      type="button"
-                    >
-                      <Download size={18} className="text-primary group-hover:translate-y-1 transition-transform flex-shrink-0" />
-                      <span className="text-sm font-medium">Download Resume</span>
-                    </button>
-                  </motion.div>
-                )}
-              </div>
+              {/* Resume Button - Simple button that opens modal/dropdown */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowResumeDropdown(true);
+                }}
+                className="w-full sm:w-auto min-w-[180px] px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5 active:scale-95 touch-manipulation"
+                aria-label="Open resume options"
+                type="button"
+              >
+                <Download size={18} />
+                <span>Resume</span>
+                <ChevronDown size={16} />
+              </button>
             </motion.div>
 
-            {/* Mobile Bottom Sheet */}
-            {isMobile && showResumeDropdown && (
+            {/* Desktop Dropdown - Only visible on md and above */}
+            {showResumeDropdown && !isMobile && (
               <>
-                {/* Backdrop Overlay */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                {/* Invisible backdrop to close dropdown */}
+                <div
+                  className="fixed inset-0 z-40"
                   onClick={() => setShowResumeDropdown(false)}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
-                  style={{ touchAction: 'none' }}
                 />
-
-                {/* Bottom Sheet */}
+                
                 <motion.div
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "100%" }}
-                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                  className="fixed bottom-0 left-0 right-0 z-[101] max-h-[90vh] overflow-y-auto"
-                  style={{ touchAction: 'pan-y' }}
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 mt-2 w-[280px] glass rounded-xl border border-border/50 shadow-2xl overflow-hidden z-50"
+                  style={{ top: 'calc(100% + 0.5rem)' }}
                 >
-                  <div className="glass-strong rounded-t-3xl border-t border-border/50 shadow-2xl p-6 pb-safe-bottom">
-                    {/* Handle Bar */}
-                    <div className="flex justify-center mb-5">
-                      <div className="w-12 h-1.5 bg-muted-foreground/30 rounded-full" />
-                    </div>
-
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setShowResumeDropdown(false)}
-                      className="absolute top-5 right-5 w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-primary/10 active:scale-95 transition-all touch-manipulation"
-                      aria-label="Close"
-                      type="button"
-                    >
-                      <X size={18} />
-                    </button>
-
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-center mb-6 pr-8">Resume Options</h3>
-
-                    {/* Action Buttons */}
-                    <div className="space-y-3 pb-2">
-                      <motion.button
-                        onClick={handleViewResume}
-                        whileTap={{ scale: 0.97 }}
-                        className="w-full px-6 py-4 rounded-xl glass border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 active:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
-                        type="button"
-                      >
-                        <Eye size={22} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
-                        <span className="text-base font-semibold">View Resume</span>
-                      </motion.button>
-
-                      <motion.button
-                        onClick={handleDownloadResume}
-                        whileTap={{ scale: 0.97 }}
-                        className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 active:shadow-md transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
-                        type="button"
-                      >
-                        <Download size={22} className="group-hover:translate-y-1 transition-transform flex-shrink-0" />
-                        <span className="text-base font-semibold">Download Resume</span>
-                      </motion.button>
-                    </div>
-
-                    {/* Safe area padding for devices with notch/home indicator */}
-                    <div className="h-safe-bottom" />
-                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleViewResume();
+                    }}
+                    className="w-full px-6 py-4 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
+                    type="button"
+                  >
+                    <Eye size={20} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
+                    <span className="text-base font-medium">View Resume</span>
+                  </button>
+                  <div className="h-px bg-border/50" />
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDownloadResume();
+                    }}
+                    className="w-full px-6 py-4 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
+                    type="button"
+                  >
+                    <Download size={20} className="text-primary group-hover:translate-y-1 transition-transform flex-shrink-0" />
+                    <span className="text-base font-medium">Download Resume</span>
+                  </button>
                 </motion.div>
               </>
             )}
+
+        {/* Mobile Bottom Sheet Modal - Only visible on mobile */}
+        {isMobile && showResumeDropdown && (
+          <div className="fixed inset-0 z-[999] flex items-end">
+            {/* Dark Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setShowResumeDropdown(false)}
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            />
+
+            {/* Bottom Sheet */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full bg-background border-t-2 border-primary/20 rounded-t-3xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Handle Bar */}
+              <div className="flex justify-center pt-4 pb-2">
+                <div className="w-12 h-1.5 bg-muted-foreground/40 rounded-full" />
+              </div>
+
+              {/* Content */}
+              <div className="px-6 pb-8 pt-2">
+                {/* Header with Close Button */}
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold">Resume Options</h3>
+                  <button
+                    onClick={() => setShowResumeDropdown(false)}
+                    className="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/10 active:scale-95 transition-all touch-manipulation"
+                    aria-label="Close"
+                    type="button"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleViewResume();
+                    }}
+                    className="w-full px-6 py-4 rounded-xl glass border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 active:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
+                    type="button"
+                  >
+                    <Eye size={24} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
+                    <span className="text-lg font-semibold">View Resume</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDownloadResume();
+                    }}
+                    className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 active:shadow-md transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
+                    type="button"
+                  >
+                    <Download size={24} className="group-active:translate-y-1 transition-transform flex-shrink-0" />
+                    <span className="text-lg font-semibold">Download Resume</span>
+                  </button>
+                </div>
+
+                {/* Safe area for devices with home indicator */}
+                <div className="h-6" />
+              </div>
+            </motion.div>
+          </div>
+        )}
           </div>
 
           {/* Right side - Developer Illustration (Hidden on Mobile) */}
