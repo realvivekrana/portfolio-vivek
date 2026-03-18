@@ -1,4 +1,4 @@
-import { ArrowUp, Heart, Code2, Mail, Phone, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
+import { ArrowUp, Code2, Mail, Phone, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -263,16 +263,10 @@ const Footer = () => {
             <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-6" />
             
             {/* Mobile: Stack Vertically, Desktop: Horizontal */}
-            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
-                <p className="text-sm sm:text-xs text-muted-foreground">
-                  © {new Date().getFullYear()} Vivek Kumar Rana.
-                </p>
-                <span className="hidden sm:inline text-muted-foreground">•</span>
-                <p className="text-sm sm:text-xs text-muted-foreground flex items-center gap-1">
-                  Made with <Heart size={14} className="text-primary animate-pulse" fill="currentColor" /> by Vivek Rana
-                </p>
-              </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4">
+              <p className="text-sm sm:text-xs text-muted-foreground">
+                © {new Date().getFullYear()} Vivek Kumar Rana. All rights reserved.
+              </p>
 
               <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
                 <p className="text-sm sm:text-xs text-muted-foreground/70">
