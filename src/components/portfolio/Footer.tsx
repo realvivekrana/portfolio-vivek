@@ -1,4 +1,4 @@
-import { ArrowUp, Heart, Code2, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowUp, Heart, Code2, Mail, Phone, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -23,6 +23,13 @@ const Footer = () => {
     { icon: Github, href: "https://github.com/realvivekrana", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
     { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter" },
+  ];
+
+  const socialMedia = [
+    { icon: Instagram, href: "https://www.instagram.com/mrvivaanrana/", label: "Instagram", color: "hover:text-pink-500" },
+    { icon: Facebook, href: "https://www.facebook.com/mrvivaanrana/", label: "Facebook", color: "hover:text-blue-500" },
+    { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter", color: "hover:text-sky-400" },
+    { icon: MessageCircle, href: "https://wa.me/919304718075", label: "WhatsApp", color: "hover:text-green-500" },
   ];
 
   return (
@@ -201,6 +208,50 @@ const Footer = () => {
               </p>
             </motion.div>
           </div>
+
+          {/* Connect with me - Social Media Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-12 sm:mt-16"
+          >
+            <div className="text-center mb-6 sm:mb-8">
+              <h4 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+                Connect <span className="gradient-text">with me</span>
+              </h4>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Follow me on social media for updates and insights
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-5">
+              {socialMedia.map((social, index) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6 + index * 0.1, duration: 0.3 }}
+                  whileHover={{ scale: 1.1, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`group relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl glass flex items-center justify-center text-muted-foreground ${social.color} transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 touch-manipulation`}
+                >
+                  <social.icon size={28} className="sm:w-8 sm:h-8 transition-transform duration-300 group-hover:scale-110" />
+                  
+                  {/* Tooltip */}
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg text-xs font-medium text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                    {social.label}
+                  </span>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
 
           {/* Bottom Bar */}
           <motion.div
