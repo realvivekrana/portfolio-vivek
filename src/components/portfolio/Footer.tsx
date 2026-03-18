@@ -75,7 +75,7 @@ const Footer = () => {
       <div className="relative">
         <div className="container mx-auto px-4 py-12 md:py-16">
           {/* Footer Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12">
             
             {/* About Column */}
             <motion.div
@@ -83,19 +83,19 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="space-y-4"
+              className="space-y-4 text-center md:text-left"
             >
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Code2 className="text-primary" size={20} />
                 </div>
                 <h3 className="text-xl font-bold gradient-text">Vivek Rana</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto md:mx-0">
                 Frontend Developer specializing in React.js and modern web technologies. 
                 Passionate about creating beautiful, performant user experiences.
               </p>
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-2 justify-center md:justify-start">
                 {socials.map((social, i) => (
                   <motion.a
                     key={social.label}
@@ -119,9 +119,10 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-center md:text-left"
             >
               <h4 className="text-base font-semibold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-3">
+              <ul className="space-y-3 flex flex-col items-center md:items-start">
                 {quickLinks.map((link) => (
                   <li key={link.label}>
                     <button
@@ -142,9 +143,10 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-center md:text-left"
             >
               <h4 className="text-base font-semibold text-foreground mb-4">Contact Info</h4>
-              <ul className="space-y-3">
+              <ul className="space-y-3 flex flex-col items-center md:items-start">
                 <li>
                   <a
                     href="mailto:vivekranaworks@gmail.com"
@@ -176,12 +178,13 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-center md:text-left"
             >
               <h4 className="text-base font-semibold text-foreground mb-4">My Location</h4>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="rounded-xl overflow-hidden shadow-lg border border-border/50 mb-3"
+                className="rounded-xl overflow-hidden shadow-lg border border-border/50 mb-3 max-w-sm mx-auto md:mx-0"
               >
                 <iframe
                   src="https://maps.google.com/maps?q=Noida%20Uttar%20Pradesh%20India&t=&z=13&ie=UTF8&iwloc=&output=embed"
