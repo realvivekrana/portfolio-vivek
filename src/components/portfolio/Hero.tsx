@@ -192,21 +192,21 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center lg:items-start"
             >
               <button
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
-                className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105"
+                className="w-full sm:w-auto px-8 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105"
               >
                 <ExternalLink size={18} /> View Projects
               </button>
               
-              {/* Resume Button */}
-              <div className="relative">
+              {/* Resume Button with Container */}
+              <div className="relative w-full sm:w-auto inline-block">
                 <button
                   onClick={() => setShowResumeDropdown(!showResumeDropdown)}
                   onBlur={() => !isMobile && setTimeout(() => setShowResumeDropdown(false), 200)}
-                  className="w-full px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5"
+                  className="w-full sm:w-auto px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5"
                   aria-label="Resume options"
                   aria-expanded={showResumeDropdown}
                 >
@@ -227,7 +227,7 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full mt-2 left-0 right-0 glass rounded-lg border border-border/50 shadow-xl overflow-hidden z-50"
+                        className="absolute top-full mt-2 left-0 w-full min-w-[200px] glass rounded-lg border border-border/50 shadow-xl overflow-hidden z-50"
                       >
                         <button
                           onClick={handleViewResume}
