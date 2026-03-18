@@ -14,28 +14,29 @@ const About = () => {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" className="section-padding relative">
-      <div className="container mx-auto" ref={ref}>
+    <section id="about" className="w-full py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden">
+      <div className="w-full px-5 sm:px-6 md:px-10 lg:px-16 max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-7xl mx-auto" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
             About <span className="gradient-text">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
+          <div className="w-16 sm:w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+        <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 lg:grid lg:grid-cols-3">
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="md:col-span-2 lg:col-span-1"
+            className="w-full"
           >
-            <div className="relative rounded-2xl overflow-hidden glass p-4 max-w-md mx-auto lg:max-w-none">
+            <div className="relative rounded-2xl overflow-hidden glass p-3 sm:p-4 max-w-md mx-auto">
               <img
                 src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop"
                 alt="Developer workspace"
@@ -51,15 +52,15 @@ const About = () => {
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="space-y-5 md:col-span-2 lg:col-span-1"
+            className="space-y-4 sm:space-y-5 w-full"
           >
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               I'm a <span className="text-primary font-semibold">MERN Full Stack Developer</span> with a
               strong passion for building scalable and responsive web applications. Currently pursuing my 
               Master of Computer Applications (MCA) with specialization in Artificial Intelligence and Machine Learning 
               from Amity University Online.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               I specialize in <span className="text-primary">React</span>,{" "}
               <span className="text-primary">Node.js</span>,{" "}
               <span className="text-primary">Express.js</span>, and{" "}
@@ -67,7 +68,7 @@ const About = () => {
               turning complex problems into simple, elegant solutions and am constantly learning new
               technologies to stay ahead in this ever-evolving field.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               Currently working as a Frontend Developer Intern at Athenura, I've completed comprehensive 
               training in MERN stack development and built multiple full-stack projects. When I'm not coding, 
               you can find me exploring new technologies and contributing to open-source projects.
@@ -79,7 +80,7 @@ const About = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            className="space-y-4 md:col-span-2 lg:col-span-1"
+            className="flex flex-col gap-3 sm:gap-4 w-full"
           >
             {highlights.map((item, i) => (
               <motion.div
@@ -92,14 +93,14 @@ const About = () => {
                   ease: "easeOut"
                 }}
                 whileHover={{ scale: 1.03, y: -3 }}
-                className="glass rounded-xl p-5 flex items-center gap-4 hover:glow-border transition-all duration-300 group"
+                className="glass rounded-xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 hover:glow-border transition-all duration-300 group"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <item.icon className="text-primary" size={24} />
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
+                  <item.icon className="text-primary" size={22} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">{item.label}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h3 className="font-semibold text-foreground text-base sm:text-lg">{item.label}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{item.desc}</p>
                 </div>
               </motion.div>
             ))}

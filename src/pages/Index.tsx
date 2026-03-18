@@ -13,11 +13,11 @@ import AnimatedBackground from "@/components/portfolio/AnimatedBackground";
 
 const Index = () => {
   return (
-    <>
+    <div className="overflow-x-hidden w-full">
       <AnimatedBackground />
       <LoadingScreen />
       <Navbar />
-      <main>
+      <main className="w-full">
         <Hero />
         <About />
         <Skills />
@@ -28,7 +28,7 @@ const Index = () => {
         <Contact />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -99,10 +99,16 @@
     @apply border-border;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
+  
+  html {
+    @apply overflow-x-hidden;
+  }
+  
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body overflow-x-hidden w-full;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }

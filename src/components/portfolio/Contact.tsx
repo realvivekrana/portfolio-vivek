@@ -29,28 +29,29 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="section-padding relative">
-      <div className="container mx-auto max-w-4xl" ref={ref}>
+    <section id="contact" className="w-full py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden">
+      <div className="w-full px-5 sm:px-6 md:px-10 lg:px-16 max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
             Get In <span className="gradient-text">Touch</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-12 rounded-full" />
+          <div className="w-16 sm:w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-8 sm:gap-10">
           {/* Image - Shows on all devices */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-            className="order-1 md:order-1"
+            className="w-full"
           >
-            <div className="relative rounded-2xl overflow-hidden glass p-4 h-full max-w-sm mx-auto md:max-w-none">
+            <div className="relative rounded-2xl overflow-hidden glass p-3 sm:p-4 h-full max-w-sm mx-auto md:max-w-none">
               <img
                 src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=600&fit=crop"
                 alt="Contact illustration"
@@ -66,25 +67,25 @@ const Contact = () => {
             initial={{ opacity: 0, x: -30, scale: 0.95 }}
             animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-            className="space-y-6 order-2 md:order-2"
+            className="flex flex-col gap-5 sm:gap-6 w-full"
           >
-            <h3 className="text-xl font-bold text-foreground">Let's work together</h3>
-            <p className="text-muted-foreground leading-relaxed">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground">Let's work together</h3>
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               I'm always open to new opportunities, collaborations, and interesting projects. Feel free
               to reach out!
             </p>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <MailIcon size={18} className="text-primary" />
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground">
+                <MailIcon size={20} className="text-primary flex-shrink-0" />
                 <a 
                   href="mailto:vivekranaworks@gmail.com"
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary transition-colors break-all"
                 >
                   vivekranaworks@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <Phone size={18} className="text-primary" />
+              <div className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground">
+                <Phone size={20} className="text-primary flex-shrink-0" />
                 <a 
                   href="tel:+919304718075"
                   className="hover:text-primary transition-colors"
@@ -92,13 +93,13 @@ const Contact = () => {
                   +91 9304718075
                 </a>
               </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin size={18} className="text-primary" />
+              <div className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground">
+                <MapPin size={20} className="text-primary flex-shrink-0" />
                 <span>Noida, Uttar Pradesh, India</span>
               </div>
             </div>
 
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-3 sm:gap-4 pt-2 sm:pt-4">
               {socials.map((s) => (
                 <a
                   key={s.label}
@@ -106,9 +107,9 @@ const Contact = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-primary hover:glow-border transition-all duration-300"
+                  className="w-12 h-12 sm:w-11 sm:h-11 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-primary hover:glow-border transition-all duration-300 touch-manipulation"
                 >
-                  <s.icon size={20} />
+                  <s.icon size={22} className="sm:w-5 sm:h-5" />
                 </a>
               ))}
             </div>
