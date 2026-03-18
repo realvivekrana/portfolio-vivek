@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/-Vivek-Rana-MERN-Full-Stack-Developer-Portfolio/",
+  base: "/portfolio-vivek/",
   server: {
     host: "::",
     port: 8080,
