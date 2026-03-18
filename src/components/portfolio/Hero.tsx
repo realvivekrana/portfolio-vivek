@@ -304,14 +304,17 @@ const Hero = () => {
         </div>
 
         {/* Scroll indicator */}
-        <motion.div
+        <motion.button
+          onClick={() => document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" })}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer hover:text-primary transition-colors touch-manipulation"
+          aria-label="Scroll to about section"
+          type="button"
         >
-          <ArrowDown className="text-muted-foreground" size={24} />
-        </motion.div>
+          <ArrowDown className="text-muted-foreground hover:text-primary transition-colors" size={28} />
+        </motion.button>
       </div>
     </section>
   );
