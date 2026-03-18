@@ -1,23 +1,13 @@
-import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail, Phone, MapPin, Send } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail, Phone, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNavClick = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Add newsletter subscription logic here
-    console.log("Newsletter subscription:", email);
-    setEmail("");
   };
 
   const quickLinks = [
@@ -180,38 +170,32 @@ const Footer = () => {
               </ul>
             </motion.div>
 
-            {/* Newsletter Column */}
+            {/* Location Map Column */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <h4 className="text-base font-semibold text-foreground mb-4">Stay Updated</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Subscribe to get notified about new projects and updates.
+              <h4 className="text-base font-semibold text-foreground mb-4">My Location</h4>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-xl overflow-hidden shadow-lg border border-border/50 mb-3"
+              >
+                <iframe
+                  src="https://maps.google.com/maps?q=Noida%20Uttar%20Pradesh%20India&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="200"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  title="Location Map - Noida, Uttar Pradesh, India"
+                  className="w-full"
+                />
+              </motion.div>
+              <p className="text-xs text-muted-foreground/80 text-center leading-relaxed">
+                Available for freelance & full-time opportunities
               </p>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                <div className="relative">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                    className="w-full px-4 py-2.5 rounded-lg glass border border-border/50 bg-background/50 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                  />
-                </div>
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full px-4 py-2.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
-                >
-                  <span>Subscribe</span>
-                  <Send size={16} className="group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </form>
             </motion.div>
           </div>
 
