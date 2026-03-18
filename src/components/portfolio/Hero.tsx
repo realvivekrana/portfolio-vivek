@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, ExternalLink, Mail, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowDown, ExternalLink, Eye, Download, ChevronDown } from "lucide-react";
 import profileImg from "@/assets/vivek-profile.jpg";
 
 // Personal Information - Update roles here
@@ -18,6 +18,24 @@ const Hero = () => {
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
+  const [showResumeDropdown, setShowResumeDropdown] = useState(false);
+
+  const resumePath = "/Vivek-Kumar-Rana-Resume.pdf";
+
+  const handleViewResume = () => {
+    window.open(resumePath, "_blank");
+    setShowResumeDropdown(false);
+  };
+
+  const handleDownloadResume = () => {
+    const link = document.createElement("a");
+    link.href = resumePath;
+    link.download = "Vivek-Kumar-Rana-Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setShowResumeDropdown(false);
+  };
 
   // Blinking cursor effect
   useEffect(() => {
@@ -154,13 +172,55 @@ const Hero = () => {
               >
                 <ExternalLink size={18} /> View Projects
               </button>
-              <a
-                href="/Vivek-Kumar-Rana-Resume.pdf"
-                download="Vivek-Kumar-Rana-Resume.pdf"
-                className="px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5"
-              >
-                <Download size={18} /> Download Resume
-              </a>
+              
+              {/* Resume Dropdown Button */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowResumeDropdown(!showResumeDropdown)}
+                  onBlur={() => setTimeout(() => setShowResumeDropdown(false), 200)}
+                  className="w-full px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5"
+                  aria-label="Resume options"
+                  aria-expanded={showResumeDropdown}
+                >
+                  <Download size={18} />
+                  <span>Resume</span>
+                  <ChevronDown 
+                    size={16} 
+                    className={`transition-transform duration-300 ${showResumeDropdown ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {showResumeDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full mt-2 left-0 right-0 glass rounded-lg border border-border/50 shadow-xl overflow-hidden z-50"
+                    >
+                      <button
+                        onClick={handleViewResume}
+                        className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
+                        aria-label="View resume in new tab"
+                      >
+                        <Eye size={18} className="text-primary group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">View Resume</span>
+                      </button>
+                      <div className="h-px bg-border/50" />
+                      <button
+                        onClick={handleDownloadResume}
+                        className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
+                        aria-label="Download resume PDF"
+                      >
+                        <Download size={18} className="text-primary group-hover:translate-y-1 transition-transform" />
+                        <span className="text-sm font-medium">Download Resume</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
 
