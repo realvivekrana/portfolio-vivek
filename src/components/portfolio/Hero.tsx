@@ -105,7 +105,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative w-full min-h-screen flex items-center justify-center py-16 sm:py-20 md:py-24 overflow-hidden"
+      className="relative w-full min-h-screen flex items-center justify-center py-12 sm:py-16 md:py-20 overflow-hidden"
     >
       {/* Animated background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
