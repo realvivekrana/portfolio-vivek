@@ -1,7 +1,10 @@
-import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail, Phone } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Twitter, Heart, Code2, Mail, Phone, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -10,9 +13,17 @@ const Footer = () => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Add newsletter subscription logic here
+    console.log("Newsletter subscription:", email);
+    setEmail("");
+  };
+
   const quickLinks = [
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
+    { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
     { label: "Contact", href: "#contact" },
   ];
@@ -21,98 +32,80 @@ const Footer = () => {
     { icon: Github, href: "https://github.com/realvivekrana", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
     { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter" },
-    { icon: Mail, href: "mailto:vivekranaworks@gmail.com", label: "Email" },
   ];
 
   return (
     <footer className="relative mt-20 md:mt-32 overflow-hidden">
-      {/* Gradient Top Border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent pointer-events-none" />
       
-      {/* Glass Background */}
-      <div className="glass-strong backdrop-blur-xl">
+      {/* Top CTA Section */}
+      <div className="relative">
+        <div className="container mx-auto px-4 py-16 md:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              Let's Build Something{" "}
+              <span className="gradient-text">Amazing Together</span>
+            </h2>
+            <p className="text-muted-foreground text-base md:text-lg mb-8 max-w-2xl mx-auto">
+              Have a project in mind? Let's collaborate and create something extraordinary.
+            </p>
+            <motion.button
+              onClick={() => handleNavClick("#contact")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 inline-flex items-center gap-2"
+            >
+              <Mail size={20} />
+              Contact Me
+            </motion.button>
+          </motion.div>
+        </div>
+
+        {/* Decorative Divider */}
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Main Footer Content */}
+      <div className="relative">
         <div className="container mx-auto px-4 py-12 md:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Left side - Footer Content */}
-            <div>
-              {/* Main Content Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                {/* Left Section - Name & Role */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="text-center sm:text-left"
-                >
-                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-                <Code2 className="text-primary" size={24} />
+          {/* Footer Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12">
+            
+            {/* About Column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Code2 className="text-primary" size={20} />
+                </div>
                 <h3 className="text-xl font-bold gradient-text">Vivek Rana</h3>
               </div>
-              <p className="text-sm text-muted-foreground mb-3">
-                MERN Stack Developer
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Frontend Developer specializing in React.js and modern web technologies. 
+                Passionate about creating beautiful, performant user experiences.
               </p>
-              <div className="space-y-2">
-                <a 
-                  href="mailto:vivekranaworks@gmail.com"
-                  className="flex items-center justify-center sm:justify-start gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <Mail size={14} />
-                  <span>vivekranaworks@gmail.com</span>
-                </a>
-                <a 
-                  href="tel:+919304718075"
-                  className="flex items-center justify-center sm:justify-start gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <Phone size={14} />
-                  <span>+91 9304718075</span>
-                </a>
-              </div>
-              <p className="text-xs text-muted-foreground/70 leading-relaxed max-w-xs mx-auto sm:mx-0 mt-3">
-                Building modern web applications with passion and precision. Turning ideas into production-ready solutions.
-              </p>
-            </motion.div>
-
-            {/* Center Section - Quick Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-center sm:text-left"
-            >
-              <h4 className="text-sm font-semibold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {quickLinks.map((link, i) => (
-                  <motion.li
-                    key={link.label}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.2 + i * 0.05 }}
-                  >
-                    <button
-                      onClick={() => handleNavClick(link.href)}
-                      className="text-sm text-muted-foreground hover:text-primary transition-all duration-300 hover:translate-x-1 inline-block"
-                    >
-                      {link.label}
-                    </button>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Right Section - Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center sm:text-left sm:col-span-2 lg:col-span-1"
-            >
-              <h4 className="text-sm font-semibold text-foreground mb-4">Connect With Me</h4>
-              <div className="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
+              <div className="flex gap-3 pt-2">
                 {socials.map((social, i) => (
                   <motion.a
                     key={social.label}
@@ -120,118 +113,158 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.4, 
-                      delay: 0.3 + i * 0.08,
-                      type: "spring",
-                      stiffness: 200
-                    }}
-                    whileHover={{ 
-                      scale: 1.15, 
-                      y: -3,
-                      transition: { duration: 0.3 }
-                    }}
-                    whileTap={{ scale: 0.9 }}
-                    className="relative w-11 h-11 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:glow-border hover:bg-primary/10 transition-all duration-300 group"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
                   >
                     <social.icon size={18} />
-                    {/* Tooltip */}
-                    <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-primary text-primary-foreground text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none z-10">
-                      {social.label}
-                    </span>
                   </motion.a>
                 ))}
               </div>
-                </motion.div>
-              </div>
-            </div>
+            </motion.div>
 
-            {/* Right side - Google Map */}
+            {/* Quick Links Column */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="w-full h-[140px] sm:h-[150px] lg:h-[160px] rounded-lg overflow-hidden shadow-md border border-border/50"
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <iframe
-                src="https://maps.google.com/maps?q=Noida%20Uttar%20Pradesh&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                title="Location Map - Noida, Uttar Pradesh"
-                className="rounded-lg"
-              />
+              <h4 className="text-base font-semibold text-foreground mb-4">Quick Links</h4>
+              <ul className="space-y-3">
+                {quickLinks.map((link) => (
+                  <li key={link.label}>
+                    <button
+                      onClick={() => handleNavClick(link.href)}
+                      className="text-sm text-muted-foreground hover:text-primary transition-all duration-300 hover:translate-x-1 inline-flex items-center gap-2 group"
+                    >
+                      <span className="w-0 h-px bg-primary group-hover:w-4 transition-all duration-300" />
+                      {link.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Contact Info Column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h4 className="text-base font-semibold text-foreground mb-4">Contact Info</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="mailto:vivekranaworks@gmail.com"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-start gap-3 group"
+                  >
+                    <Mail size={18} className="mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="break-all">vivekranaworks@gmail.com</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="tel:+919304718075"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-3 group"
+                  >
+                    <Phone size={18} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <span>+91 9304718075</span>
+                  </a>
+                </li>
+                <li className="text-sm text-muted-foreground flex items-start gap-3">
+                  <MapPin size={18} className="mt-0.5 flex-shrink-0 text-primary" />
+                  <span>Noida, Uttar Pradesh, India</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* Newsletter Column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <h4 className="text-base font-semibold text-foreground mb-4">Stay Updated</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Subscribe to get notified about new projects and updates.
+              </p>
+              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="w-full px-4 py-2.5 rounded-lg glass border border-border/50 bg-background/50 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  />
+                </div>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full px-4 py-2.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
+                >
+                  <span>Subscribe</span>
+                  <Send size={16} className="group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </form>
             </motion.div>
           </div>
 
-          {/* Animated Divider */}
-          <motion.div 
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.4, ease: "easeInOut" }}
-            className="w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-6 md:mb-8"
-          />
-
-          {/* Bottom Section - Copyright & Back to Top */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <motion.p 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-xs md:text-sm text-muted-foreground flex items-center gap-2 text-center"
-            >
-              © {new Date().getFullYear()} Vivek Kumar Rana. Made with{" "}
-              <Heart size={14} className="text-primary animate-pulse" fill="currentColor" /> 
-              and dedication
-            </motion.p>
-
-            <motion.button
-              onClick={scrollToTop}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              whileHover={{ 
-                scale: 1.05, 
-                y: -5,
-                transition: { duration: 0.3, type: "spring", stiffness: 300 }
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg glass text-sm text-muted-foreground hover:text-primary hover:glow-border hover:bg-primary/10 transition-all duration-300 group"
-              aria-label="Back to top"
-            >
-              <span className="text-xs">Back to Top</span>
-              <motion.div
-                animate={{ y: [0, -2, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <ArrowUp size={16} />
-              </motion.div>
-            </motion.button>
-          </div>
-
-          {/* Tech Stack - Mobile Friendly */}
-          <motion.p 
+          {/* Bottom Bar */}
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-xs text-muted-foreground/70 text-center mt-6 md:mt-4"
+            transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Built with React • TypeScript • Tailwind CSS • Framer Motion
-          </motion.p>
+            <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-8" />
+            
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left flex items-center gap-2 flex-wrap justify-center">
+                <span>© {new Date().getFullYear()} Vivek Kumar Rana.</span>
+                <span className="hidden md:inline">•</span>
+                <span className="flex items-center gap-1">
+                  Made with <Heart size={14} className="text-primary animate-pulse" fill="currentColor" /> by Vivek Rana
+                </span>
+              </p>
+
+              <div className="flex items-center gap-4">
+                <p className="text-xs text-muted-foreground/70">
+                  React • TypeScript • Tailwind
+                </p>
+                <motion.button
+                  onClick={scrollToTop}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 group"
+                  aria-label="Back to top"
+                >
+                  <ArrowUp size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Subtle Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent pointer-events-none -z-10" />
+      {/* Floating Back to Top Button (Mobile) */}
+      <motion.button
+        onClick={scrollToTop}
+        initial={{ opacity: 0, scale: 0 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-8 right-8 w-12 h-12 md:hidden rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center z-50"
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={20} />
+      </motion.button>
     </footer>
   );
 };
