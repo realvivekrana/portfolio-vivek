@@ -33,7 +33,7 @@ const Footer = () => {
       
       {/* Top CTA Section */}
       <div className="relative">
-        <div className="container mx-auto px-4 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-12 sm:py-16 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -41,27 +41,27 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               Let's Build Something{" "}
               <span className="gradient-text">Amazing Together</span>
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
               Have a project in mind? Let's collaborate and create something extraordinary.
             </p>
             <motion.button
               onClick={() => handleNavClick("#contact")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 inline-flex items-center gap-2"
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-base sm:text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 inline-flex items-center gap-2"
             >
-              <Mail size={20} />
+              <Mail size={20} className="sm:w-5 sm:h-5" />
               Contact Me
             </motion.button>
           </motion.div>
         </div>
 
         {/* Decorative Divider */}
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16">
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -74,9 +74,9 @@ const Footer = () => {
 
       {/* Main Footer Content */}
       <div className="relative">
-        <div className="container mx-auto px-5 md:px-4 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-10 sm:py-12 md:py-16">
           {/* Footer Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 mb-12 max-w-md md:max-w-none mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 mb-10 sm:mb-12">
             
             {/* About Column */}
             <motion.div
@@ -84,15 +84,15 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Code2 className="text-primary" size={20} />
                 </div>
-                <h3 className="text-xl font-bold gradient-text">Vivek Rana</h3>
+                <h3 className="text-lg sm:text-xl font-bold gradient-text">Vivek Rana</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                 Frontend Developer specializing in React.js and modern web technologies. 
                 Passionate about creating beautiful, performant user experiences.
               </p>
@@ -106,9 +106,9 @@ const Footer = () => {
                     aria-label={social.label}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
+                    className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
                   >
-                    <social.icon size={18} />
+                    <social.icon size={20} className="sm:w-[18px] sm:h-[18px]" />
                   </motion.a>
                 ))}
               </div>
@@ -121,13 +121,13 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h4 className="text-base font-semibold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-3">
+              <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">Quick Links</h4>
+              <ul className="space-y-2.5 sm:space-y-3">
                 {quickLinks.map((link) => (
                   <li key={link.label}>
                     <button
                       onClick={() => handleNavClick(link.href)}
-                      className="text-sm text-muted-foreground hover:text-primary transition-all duration-300 hover:translate-x-1 inline-flex items-center gap-2 group"
+                      className="text-sm sm:text-base text-muted-foreground hover:text-primary transition-all duration-300 hover:translate-x-1 inline-flex items-center gap-2 group py-1"
                     >
                       <span className="w-0 h-px bg-primary group-hover:w-4 transition-all duration-300" />
                       {link.label}
@@ -143,29 +143,30 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
+              className="sm:col-span-2 md:col-span-1"
             >
-              <h4 className="text-base font-semibold text-foreground mb-4">Contact Info</h4>
-              <ul className="space-y-3">
+              <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">Contact Info</h4>
+              <ul className="space-y-3 sm:space-y-3.5">
                 <li>
                   <a
                     href="mailto:vivekranaworks@gmail.com"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-start gap-3 group"
+                    className="text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors duration-300 flex items-start gap-3 group py-1"
                   >
-                    <Mail size={18} className="mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <Mail size={20} className="mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform sm:w-[18px] sm:h-[18px]" />
                     <span className="break-all">vivekranaworks@gmail.com</span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="tel:+919304718075"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-3 group"
+                    className="text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-3 group py-1"
                   >
-                    <Phone size={18} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <Phone size={20} className="flex-shrink-0 group-hover:scale-110 transition-transform sm:w-[18px] sm:h-[18px]" />
                     <span>+91 9304718075</span>
                   </a>
                 </li>
-                <li className="text-sm text-muted-foreground flex items-start gap-3">
-                  <MapPin size={18} className="mt-0.5 flex-shrink-0 text-primary" />
+                <li className="text-sm sm:text-base text-muted-foreground flex items-start gap-3 py-1">
+                  <MapPin size={20} className="mt-0.5 flex-shrink-0 text-primary sm:w-[18px] sm:h-[18px]" />
                   <span>Noida, Uttar Pradesh, India</span>
                 </li>
               </ul>
@@ -177,8 +178,9 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
+              className="sm:col-span-2 md:col-span-3 lg:col-span-1"
             >
-              <h4 className="text-base font-semibold text-foreground mb-4">My Location</h4>
+              <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">My Location</h4>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -191,10 +193,10 @@ const Footer = () => {
                   style={{ border: 0 }}
                   loading="lazy"
                   title="Location Map - Noida, Uttar Pradesh, India"
-                  className="w-full"
+                  className="w-full h-[180px] sm:h-[200px]"
                 />
               </motion.div>
-              <p className="text-xs text-muted-foreground/80 text-center leading-relaxed">
+              <p className="text-xs sm:text-sm text-muted-foreground/80 text-center leading-relaxed">
                 Available for freelance & full-time opportunities
               </p>
             </motion.div>
@@ -207,29 +209,29 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-8" />
+            <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-6 sm:mb-8" />
             
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left flex items-center gap-2 flex-wrap justify-center">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+              <p className="text-xs sm:text-sm text-muted-foreground text-center md:text-left flex items-center gap-2 flex-wrap justify-center md:justify-start">
                 <span>© {new Date().getFullYear()} Vivek Kumar Rana.</span>
-                <span className="hidden md:inline">•</span>
+                <span className="hidden sm:inline">•</span>
                 <span className="flex items-center gap-1">
                   Made with <Heart size={14} className="text-primary animate-pulse" fill="currentColor" /> by Vivek Rana
                 </span>
               </p>
 
-              <div className="flex items-center gap-4">
-                <p className="text-xs text-muted-foreground/70">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <p className="text-xs sm:text-sm text-muted-foreground/70">
                   React • TypeScript • Tailwind
                 </p>
                 <motion.button
                   onClick={scrollToTop}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 group"
+                  className="w-10 h-10 sm:w-11 sm:h-11 md:w-10 md:h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 group"
                   aria-label="Back to top"
                 >
-                  <ArrowUp size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+                  <ArrowUp size={20} className="sm:w-5 sm:h-5 md:w-[18px] md:h-[18px] group-hover:-translate-y-0.5 transition-transform" />
                 </motion.button>
               </div>
             </div>
