@@ -105,7 +105,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center section-padding overflow-hidden"
+      className="relative w-full min-h-screen flex items-center justify-center py-16 sm:py-20 md:py-24 overflow-hidden"
     >
       {/* Animated background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -114,19 +114,18 @@ const Hero = () => {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary/5 rounded-full blur-2xl animate-float" style={{ animationDelay: "1.5s" }} />
       </div>
 
-      <div className="container mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="w-full px-5 sm:px-6 md:px-10 lg:px-16 max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-7xl mx-auto relative z-10">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 sm:gap-12 items-center">
           {/* Left side - Text Content */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
-            {/* Profile Photo - Visible on All Devices */}
+          <div className="text-center lg:text-left w-full order-2 lg:order-1">{/* Profile Photo - Visible on All Devices */}
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6, type: "spring" }}
-              className="mb-8 flex justify-center"
+              className="mb-6 sm:mb-8 flex justify-center"
             >
               <div className="relative">
-                <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-primary/50 animate-pulse-glow">
+                <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden border-2 border-primary/50 animate-pulse-glow">
                   <img
                     src={profileImg}
                     alt="Vivek Kumar Rana - MERN Full Stack Developer"

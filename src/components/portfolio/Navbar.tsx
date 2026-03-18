@@ -77,8 +77,8 @@ const Navbar = () => {
         scrolled ? "glass-strong shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between py-4 px-4">
-        <button onClick={() => handleClick("#home")} className="text-xl font-bold font-mono z-50">
+      <div className="w-full px-5 sm:px-6 md:px-10 lg:px-16 max-w-7xl mx-auto flex items-center justify-between py-4">
+        <button onClick={() => handleClick("#home")} className="text-lg sm:text-xl font-bold font-mono z-50 min-w-0">
           <span className="text-primary">&lt;</span>
           <span className="text-foreground">VivekRana</span>
           <span className="text-primary">/&gt;</span>
@@ -176,7 +176,7 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-16 left-4 right-4 glass-strong md:hidden shadow-2xl rounded-2xl z-50 overflow-hidden"
+              className="fixed top-20 left-4 right-4 max-w-sm mx-auto glass-strong md:hidden shadow-2xl rounded-2xl z-50 overflow-hidden"
             >
               <div className="flex flex-col py-4 px-2">
                 <ul className="flex flex-col gap-1">
