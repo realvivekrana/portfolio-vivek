@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown, ExternalLink, Eye, Download, ChevronDown, X } from "lucide-react";
+import { ArrowDown, ExternalLink, Eye, Download, X } from "lucide-react";
 import profileImg from "@/assets/vivek-profile.jpg";
 
 // Personal Information - Update roles here
@@ -18,27 +18,14 @@ const Hero = () => {
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
-  const [showResumeDropdown, setShowResumeDropdown] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   // Correct resume path using Vite base URL
   const resumeUrl = `${import.meta.env.BASE_URL}Vivek-Kumar-Rana-Resume.pdf`;
 
-  // Detect mobile screen size
+  // Prevent body scroll when modal is open
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Prevent body scroll when mobile sheet is open
-  useEffect(() => {
-    if (isMobile && showResumeDropdown) {
+    if (showResumeModal) {
       const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
@@ -53,11 +40,11 @@ const Hero = () => {
         window.scrollTo(0, scrollY);
       };
     }
-  }, [isMobile, showResumeDropdown]);
+  }, [showResumeModal]);
 
   const handleViewResume = () => {
     window.open(resumeUrl, "_blank", "noopener,noreferrer");
-    setShowResumeDropdown(false);
+    setShowResumeModal(false);
   };
 
   const handleDownloadResume = () => {
@@ -68,7 +55,7 @@ const Hero = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setShowResumeDropdown(false);
+    setShowResumeModal(false);
   };
 
   // Blinking cursor effect
@@ -208,146 +195,89 @@ const Hero = () => {
                 <ExternalLink size={18} /> View Projects
               </button>
               
-              {/* Resume Button - Simple button that opens modal/dropdown */}
+              {/* Resume Button - Opens Universal Modal */}
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowResumeDropdown(true);
-                }}
+                onClick={() => setShowResumeModal(true)}
                 className="w-full sm:w-auto min-w-[180px] px-8 py-3 rounded-lg glass border-primary/30 text-foreground font-semibold hover:border-primary/60 transition-all duration-300 flex items-center gap-2 justify-center hover:scale-105 hover:bg-primary/5 active:scale-95 touch-manipulation"
                 aria-label="Open resume options"
                 type="button"
               >
                 <Download size={18} />
                 <span>Resume</span>
-                <ChevronDown size={16} />
               </button>
             </motion.div>
 
-            {/* Desktop Dropdown - Only visible on md and above */}
-            {showResumeDropdown && !isMobile && (
-              <>
-                {/* Invisible backdrop to close dropdown */}
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowResumeDropdown(false)}
-                />
-                
-                <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 mt-2 w-[280px] glass rounded-xl border border-border/50 shadow-2xl overflow-hidden z-50"
-                  style={{ top: 'calc(100% + 0.5rem)' }}
-                >
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleViewResume();
-                    }}
-                    className="w-full px-6 py-4 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
-                    type="button"
-                  >
-                    <Eye size={20} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
-                    <span className="text-base font-medium">View Resume</span>
-                  </button>
-                  <div className="h-px bg-border/50" />
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleDownloadResume();
-                    }}
-                    className="w-full px-6 py-4 flex items-center gap-3 hover:bg-primary/10 transition-colors text-left group"
-                    type="button"
-                  >
-                    <Download size={20} className="text-primary group-hover:translate-y-1 transition-transform flex-shrink-0" />
-                    <span className="text-base font-medium">Download Resume</span>
-                  </button>
-                </motion.div>
-              </>
-            )}
+        {/* Universal Resume Modal - Works on ALL devices */}
+        <AnimatePresence>
+          {showResumeModal && (
+            <div className="fixed inset-0 z-[999] flex items-end md:items-center md:justify-center">
+              {/* Dark Overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setShowResumeModal(false)}
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              />
 
-        {/* Mobile Bottom Sheet Modal - Only visible on mobile */}
-        {isMobile && showResumeDropdown && (
-          <div className="fixed inset-0 z-[999] flex items-end">
-            {/* Dark Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setShowResumeDropdown(false)}
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-            />
-
-            {/* Bottom Sheet */}
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full bg-background border-t-2 border-primary/20 rounded-t-3xl shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Handle Bar */}
-              <div className="flex justify-center pt-4 pb-2">
-                <div className="w-12 h-1.5 bg-muted-foreground/40 rounded-full" />
-              </div>
-
-              {/* Content */}
-              <div className="px-6 pb-8 pt-2">
-                {/* Header with Close Button */}
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Resume Options</h3>
-                  <button
-                    onClick={() => setShowResumeDropdown(false)}
-                    className="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/10 active:scale-95 transition-all touch-manipulation"
-                    aria-label="Close"
-                    type="button"
-                  >
-                    <X size={20} />
-                  </button>
+              {/* Modal Content - Bottom sheet on mobile, centered on desktop */}
+              <motion.div
+                initial={{ opacity: 0, y: 100, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 100, scale: 0.95 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full md:w-auto md:min-w-[400px] md:max-w-md bg-background border-t-2 md:border-2 border-primary/20 rounded-t-3xl md:rounded-2xl shadow-2xl"
+              >
+                {/* Handle Bar - Mobile only */}
+                <div className="flex justify-center pt-4 pb-2 md:hidden">
+                  <div className="w-12 h-1.5 bg-muted-foreground/40 rounded-full" />
                 </div>
 
-                {/* Action Buttons */}
-                <div className="space-y-3">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleViewResume();
-                    }}
-                    className="w-full px-6 py-4 rounded-xl glass border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 active:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
-                    type="button"
-                  >
-                    <Eye size={24} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
-                    <span className="text-lg font-semibold">View Resume</span>
-                  </button>
+                {/* Content */}
+                <div className="px-6 pb-8 pt-2 md:pt-6">
+                  {/* Header with Close Button */}
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl md:text-2xl font-bold">Resume Options</h3>
+                    <button
+                      onClick={() => setShowResumeModal(false)}
+                      className="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/10 active:scale-95 transition-all touch-manipulation"
+                      aria-label="Close"
+                      type="button"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleDownloadResume();
-                    }}
-                    className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 active:shadow-md transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
-                    type="button"
-                  >
-                    <Download size={24} className="group-active:translate-y-1 transition-transform flex-shrink-0" />
-                    <span className="text-lg font-semibold">Download Resume</span>
-                  </button>
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleViewResume}
+                      className="w-full px-6 py-4 rounded-xl glass border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 active:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
+                      type="button"
+                    >
+                      <Eye size={24} className="text-primary group-hover:scale-110 transition-transform flex-shrink-0" />
+                      <span className="text-lg font-semibold">View Resume</span>
+                    </button>
+
+                    <button
+                      onClick={handleDownloadResume}
+                      className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 active:shadow-md transition-all duration-300 flex items-center justify-center gap-3 group touch-manipulation"
+                      type="button"
+                    >
+                      <Download size={24} className="group-active:translate-y-1 transition-transform flex-shrink-0" />
+                      <span className="text-lg font-semibold">Download Resume</span>
+                    </button>
+                  </div>
+
+                  {/* Safe area for mobile devices */}
+                  <div className="h-6 md:hidden" />
                 </div>
-
-                {/* Safe area for devices with home indicator */}
-                <div className="h-6" />
-              </div>
-            </motion.div>
-          </div>
-        )}
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
           </div>
 
           {/* Right side - Developer Illustration (Hidden on Mobile) */}
