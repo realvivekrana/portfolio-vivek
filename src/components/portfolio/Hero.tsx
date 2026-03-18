@@ -21,7 +21,8 @@ const Hero = () => {
   const [showResumeDropdown, setShowResumeDropdown] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const resumePath = "/Vivek-Kumar-Rana-Resume.pdf";
+  // Correct resume path using Vite base URL
+  const resumeUrl = `${import.meta.env.BASE_URL}Vivek-Kumar-Rana-Resume.pdf`;
 
   // Detect mobile screen size
   useEffect(() => {
@@ -49,14 +50,15 @@ const Hero = () => {
   }, [isMobile, showResumeDropdown]);
 
   const handleViewResume = () => {
-    window.open(resumePath, "_blank");
+    window.open(resumeUrl, "_blank", "noopener,noreferrer");
     setShowResumeDropdown(false);
   };
 
   const handleDownloadResume = () => {
     const link = document.createElement("a");
-    link.href = resumePath;
+    link.href = resumeUrl;
     link.download = "Vivek-Kumar-Rana-Resume.pdf";
+    link.rel = "noopener noreferrer";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
