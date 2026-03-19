@@ -1,0 +1,21 @@
+{
+  "name": "Vivek Rana - Frontend Developer Portfolio",
+  "short_name": "Vivek Rana",
+  "description": "Frontend Developer specializing in React, JavaScript, and modern web technologies",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
