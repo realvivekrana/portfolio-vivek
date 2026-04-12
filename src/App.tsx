@@ -1,9 +1,10 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Lazy load heavy components
 const IndexNew = lazy(() => import("./pages/IndexNew"));
@@ -33,44 +34,89 @@ const LoadingFallback = () => (
   </div>
 );
 
+// App fallback if everything crashes
+const AppFallback = () => (
+  <div style={{
+    background: '#050508',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#F0F0FF',
+    fontFamily: 'JetBrains Mono, monospace',
+    gap: '16px',
+    padding: '20px'
+  }}>
+    <div style={{ fontSize: '48px', fontWeight: 800, color: '#4F8EF7' }}>VR</div>
+    <div style={{ fontSize: '14px', color: '#6B6B8A' }}>Vivek Rana — Frontend Developer</div>
+    <a
+      href="mailto:vivekrana.dev@gmail.com"
+      style={{ color: '#4F8EF7', fontSize: '13px', textDecoration: 'none' }}
+    >
+      Get in touch
+    </a>
+  </div>
+);
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [ready, setReady] = useState(false);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    // Small delay so critical UI renders first
+    const t = setTimeout(() => setReady(true), 200);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Suspense fallback={<LoadingFallback />}>
-          {/* Cinematic Loading Screen */}
-          {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-          
-          {/* Custom 3D Cursor */}
-          <Cursor />
-          
-          {/* 3D Background Scene */}
-          <BackgroundScene />
-          
-          {/* Scroll Progress Indicator */}
-          <ScrollProgress />
-          
-          {/* Toast Notifications */}
-          <Toaster />
-          <Sonner />
-          
-          {/* Router */}
-          <BrowserRouter basename="/">
-            <Routes>
-              <Route path="/" element={<IndexNew />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </Suspense>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ErrorBoundary name="App-Root" fallback={<AppFallback />}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Suspense fallback={<LoadingFallback />}>
+            {/* Loading Screen */}
+            <ErrorBoundary name="LoadingScreen">
+              {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
+            </ErrorBoundary>
+            
+            {/* 3D Background Scene - if it crashes, rest of app still works */}
+            <ErrorBoundary name="BackgroundScene">
+              {ready && <BackgroundScene />}
+            </ErrorBoundary>
+            
+            {/* Custom 3D Cursor - non-critical */}
+            <ErrorBoundary name="Cursor">
+              <Cursor />
+            </ErrorBoundary>
+            
+            {/* Scroll Progress Indicator - non-critical */}
+            <ErrorBoundary name="ScrollProgress">
+              <ScrollProgress />
+            </ErrorBoundary>
+            
+            {/* Toast Notifications */}
+            <ErrorBoundary name="Toaster">
+              <Toaster />
+              <Sonner />
+            </ErrorBoundary>
+            
+            {/* Router */}
+            <ErrorBoundary name="Router">
+              <BrowserRouter basename="/">
+                <Routes>
+                  <Route path="/" element={<IndexNew />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </ErrorBoundary>
+          </Suspense>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

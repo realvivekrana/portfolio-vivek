@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
@@ -16,8 +17,23 @@ import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-700.css';
 import '@fontsource/bebas-neue/latin-400.css';
 
-createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
+// Make sure root element EXISTS
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  // This is why blank screen happens sometimes
+  document.body.innerHTML = `
+    <div style="background:#050508;min-height:100vh;display:flex;
+    align-items:center;justify-content:center;color:#4F8EF7;
+    font-family:monospace;font-size:24px;font-weight:800">VR</div>
+  `;
+  throw new Error('Root element #root not found in index.html');
+}
+
+createRoot(rootElement).render(
+  <StrictMode>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </StrictMode>
 );

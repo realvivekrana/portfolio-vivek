@@ -304,18 +304,42 @@ function CameraController() {
 export default function BackgroundScene() {
   // Detect mobile/low-end devices
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const isLowEnd = typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4;
+  const isLowEnd = typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 2;
 
-  // Disable on mobile for performance
-  if (isMobile) {
+  // Disable on mobile or low-end for performance
+  if (isMobile || isLowEnd) {
+    return null;
+  }
+
+  // Safety check for WebGL support
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) {
+      console.warn('WebGL not supported, skipping 3D background');
+      return null;
+    }
+  } catch (e) {
+    console.warn('WebGL check failed, skipping 3D background');
     return null;
   }
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
+    <div 
+      className="fixed inset-0 w-full h-full -z-10 pointer-events-none"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: -10,
+        pointerEvents: 'none'
+      }}
+    >
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
+        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)]}
         performance={{ min: 0.5, max: 1 }}
         frameloop="demand"
         gl={{ 
@@ -323,9 +347,13 @@ export default function BackgroundScene() {
           alpha: true,
           powerPreference: 'high-performance',
           stencil: false,
-          depth: true
+          depth: true,
+          failIfMajorPerformanceCaveat: true // Crash gracefully on bad GPU
         }}
         style={{ background: 'transparent' }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0);
+        }}
       >
         <CameraController />
         <ScrollCameraAnimation />
