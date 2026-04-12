@@ -26,8 +26,8 @@ const ParticleField = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Create particles
-    const particleCount = 80;
+    // Create particles - reduced to 50
+    const particleCount = 50;
     const particles: Particle[] = [];
     const connectionDistance = 150;
 
@@ -51,17 +51,25 @@ const ParticleField = () => {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Bounce off edges
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        // Boundary bounce logic - keep particles inside canvas
+        if (particle.x <= 0 || particle.x >= canvas.width) {
+          particle.vx *= -1;
+          // Clamp position to stay within bounds
+          particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        }
+        if (particle.y <= 0 || particle.y >= canvas.height) {
+          particle.vy *= -1;
+          // Clamp position to stay within bounds
+          particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        }
 
-        // Draw particle
+        // Draw particle - only blue color
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(79, 142, 247, 0.6)';
         ctx.fill();
 
-        // Draw connections
+        // Draw connections - very subtle
         particles.slice(i + 1).forEach((otherParticle) => {
           const dx = particle.x - otherParticle.x;
           const dy = particle.y - otherParticle.y;
@@ -71,7 +79,7 @@ const ParticleField = () => {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            const opacity = (1 - distance / connectionDistance) * 0.3;
+            const opacity = (1 - distance / connectionDistance) * 0.08; // Very subtle
             ctx.strokeStyle = `rgba(79, 142, 247, ${opacity})`;
             ctx.lineWidth = 1;
             ctx.stroke();

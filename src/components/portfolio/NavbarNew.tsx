@@ -19,7 +19,8 @@ const NavbarNew = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrolled = window.scrollY > 80;
+      setIsScrolled(scrolled);
 
       // Detect active section
       const sections = navItems.map(item => item.href.slice(1));
@@ -53,9 +54,13 @@ const NavbarNew = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? "glass-strong border-b border-primary/10 shadow-lg" 
+            ? "backdrop-blur-[20px] border-b shadow-lg" 
             : "bg-transparent"
         }`}
+        style={isScrolled ? {
+          background: 'rgba(5, 5, 8, 0.85)',
+          borderBottomColor: 'rgba(255, 255, 255, 0.06)',
+        } : {}}
       >
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-20">
@@ -87,17 +92,25 @@ const NavbarNew = () => {
                   whileTap={{ scale: 0.95 }}
                   className={`relative px-4 py-2 rounded-lg font-medium transition-colors ${
                     activeSection === item.href.slice(1)
-                      ? "text-primary"
+                      ? "text-[#4F8EF7]"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {item.label}
                   {activeSection === item.href.slice(1) && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute inset-0 bg-primary/10 rounded-lg -z-10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
+                    <>
+                      <motion.div
+                        layoutId="activeSection"
+                        className="absolute inset-0 bg-primary/10 rounded-lg -z-10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                      <motion.div
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                        style={{ background: '#4F8EF7' }}
+                        layoutId="activeDot"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    </>
                   )}
                 </motion.a>
               ))}
