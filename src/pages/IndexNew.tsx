@@ -1,29 +1,66 @@
+import { lazy, Suspense } from "react";
 import NavbarNew from "@/components/portfolio/NavbarNew";
 import HeroPremium from "@/components/portfolio/HeroPremium";
-import About from "@/components/portfolio/About";
-import SkillsNew from "@/components/portfolio/SkillsNew";
-import ProjectsNew from "@/components/portfolio/ProjectsNew";
-import ContactNew from "@/components/portfolio/ContactNew";
-import Footer from "@/components/portfolio/Footer";
-import LoadingScreen from "@/components/portfolio/LoadingScreen";
-import CustomCursor from "@/components/CustomCursor";
-import ParticleField from "@/components/ParticleField";
+
+// Lazy load below-the-fold components
+const About = lazy(() => import("@/components/portfolio/About"));
+const SkillsNew = lazy(() => import("@/components/portfolio/SkillsNew"));
+const ProjectsNew = lazy(() => import("@/components/portfolio/ProjectsNew"));
+const ContactNew = lazy(() => import("@/components/portfolio/ContactNew"));
+const Footer = lazy(() => import("@/components/portfolio/Footer"));
+const LoadingScreen = lazy(() => import("@/components/portfolio/LoadingScreen"));
+const CustomCursor = lazy(() => import("@/components/CustomCursor"));
+const ParticleField = lazy(() => import("@/components/ParticleField"));
+
+// Section loading fallback
+const SectionLoader = () => (
+  <div style={{
+    minHeight: '200px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#4F8EF7',
+    fontSize: '12px',
+    letterSpacing: '0.1em'
+  }}>
+    Loading...
+  </div>
+);
 
 const IndexNew = () => {
   return (
     <div className="overflow-x-hidden w-full" style={{ background: '#050508' }}>
-      <CustomCursor />
-      <ParticleField />
-      <LoadingScreen />
+      <Suspense fallback={null}>
+        <CustomCursor />
+        <ParticleField />
+        <LoadingScreen />
+      </Suspense>
+      
       <NavbarNew />
+      
       <main className="w-full relative z-10">
         <HeroPremium />
-        <About />
-        <SkillsNew />
-        <ProjectsNew />
-        <ContactNew />
+        
+        <Suspense fallback={<SectionLoader />}>
+          <About />
+        </Suspense>
+        
+        <Suspense fallback={<SectionLoader />}>
+          <SkillsNew />
+        </Suspense>
+        
+        <Suspense fallback={<SectionLoader />}>
+          <ProjectsNew />
+        </Suspense>
+        
+        <Suspense fallback={<SectionLoader />}>
+          <ContactNew />
+        </Suspense>
       </main>
-      <Footer />
+      
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };

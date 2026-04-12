@@ -315,11 +315,15 @@ export default function BackgroundScene() {
     <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
+        performance={{ min: 0.5, max: 1 }}
+        frameloop="demand"
         gl={{ 
-          antialias: !isLowEnd, 
+          antialias: false,  // Saves ~30% GPU
           alpha: true,
-          powerPreference: 'high-performance'
+          powerPreference: 'high-performance',
+          stencil: false,
+          depth: true
         }}
         style={{ background: 'transparent' }}
       >
