@@ -48,29 +48,30 @@ const SkillsNew = () => {
       </div>
       
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
-        {/* Header */}
+        {/* Header with typography system */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-16 relative"
         >
+          {/* Small mono label */}
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
-            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 text-sm font-medium text-primary mb-6"
+            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 font-mono text-label text-primary tracking-[0.2em] uppercase mb-6"
           >
             💻 Technical Expertise
           </motion.span>
           
+          {/* Main heading - Syne Display with 3D depth */}
           <motion.h2 
-            className="text-4xl sm:text-5xl md:text-6xl font-black mb-6"
+            className="font-display text-display-lg font-bold mb-6 tracking-[-0.02em]"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
           >
-            {/* 3D Text Depth Effect */}
             <span 
               className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
               style={{
@@ -88,14 +89,28 @@ const SkillsNew = () => {
             </span>
           </motion.h2>
           
+          {/* Subtitle - Inter body font */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+            className="font-body text-body-lg text-muted-foreground max-w-2xl mx-auto"
           >
             Mastering modern technologies to build exceptional digital experiences
           </motion.p>
+          
+          {/* Large Bebas watermark */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 0.025, scale: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.5 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider pointer-events-none whitespace-nowrap"
+            style={{ 
+              textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
+            }}
+          >
+            SKILLS
+          </motion.div>
         </motion.div>
 
         {/* 3D Skills Orbit Sphere */}
@@ -165,13 +180,13 @@ const SkillsNew = () => {
                   {stat.icon}
                 </motion.div>
                 
-                {/* Value */}
-                <div className="text-3xl md:text-4xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+                {/* Value - Plus Jakarta heading font */}
+                <div className="font-heading text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
                   {stat.value}
                 </div>
                 
-                {/* Label */}
-                <div className="text-sm text-muted-foreground font-medium">
+                {/* Label - Inter body font */}
+                <div className="font-body text-body-sm text-muted-foreground font-medium">
                   {stat.label}
                 </div>
               </div>
@@ -217,7 +232,7 @@ const SkillsNew = () => {
               <span className="text-sm font-medium text-foreground">
                 {cat.category}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="font-mono text-mono-sm text-muted-foreground">
                 ({cat.count})
               </span>
             </motion.div>

@@ -14,9 +14,54 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Space Grotesk", "sans-serif"],
-        body: ["Space Grotesk", "sans-serif"],
+        display: ["Syne", "sans-serif"],
+        heading: ["Plus Jakarta Sans", "sans-serif"],
+        body: ["Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        bebas: ["Bebas Neue", "sans-serif"],
+      },
+      fontSize: {
+        "display-2xl": [
+          "clamp(64px, 10vw, 120px)",
+          { lineHeight: "0.95", letterSpacing: "-0.04em" },
+        ],
+        "display-xl": [
+          "clamp(48px, 7vw, 88px)",
+          { lineHeight: "1.0", letterSpacing: "-0.03em" },
+        ],
+        "display-lg": [
+          "clamp(36px, 5vw, 64px)",
+          { lineHeight: "1.05", letterSpacing: "-0.02em" },
+        ],
+        "display-md": [
+          "clamp(28px, 4vw, 48px)",
+          { lineHeight: "1.1", letterSpacing: "-0.02em" },
+        ],
+        "display-sm": [
+          "clamp(22px, 3vw, 36px)",
+          { lineHeight: "1.2", letterSpacing: "-0.01em" },
+        ],
+        "body-lg": [
+          "clamp(16px, 1.5vw, 18px)",
+          { lineHeight: "1.8", letterSpacing: "0.01em" },
+        ],
+        "body-md": [
+          "clamp(14px, 1.2vw, 16px)",
+          { lineHeight: "1.7", letterSpacing: "0.01em" },
+        ],
+        "body-sm": [
+          "clamp(12px, 1vw, 14px)",
+          { lineHeight: "1.6", letterSpacing: "0.02em" },
+        ],
+        "mono-lg": [
+          "clamp(14px, 1.2vw, 16px)",
+          { lineHeight: "1.6", letterSpacing: "0.05em" },
+        ],
+        "mono-sm": [
+          "clamp(11px, 1vw, 13px)",
+          { lineHeight: "1.5", letterSpacing: "0.08em" },
+        ],
+        label: ["11px", { lineHeight: "1.4", letterSpacing: "0.15em" }],
       },
       colors: {
         border: "hsl(var(--border))",

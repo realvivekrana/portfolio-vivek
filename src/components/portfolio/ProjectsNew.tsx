@@ -150,15 +150,17 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
 
         {/* Content */}
         <div className="p-6 md:p-8" style={{ transform: "translateZ(20px)" }}>
-          <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+          {/* Title - Plus Jakarta heading font */}
+          <h3 className="font-heading text-xl md:text-2xl font-extrabold text-foreground mb-3 group-hover:text-primary transition-colors tracking-tight">
             {project.title}
           </h3>
           
-          <p className="text-muted-foreground mb-6 leading-relaxed line-clamp-3">
+          {/* Description - Inter body font */}
+          <p className="font-body text-body-md text-muted-foreground mb-6 leading-relaxed line-clamp-3">
             {project.description}
           </p>
           
-          {/* Tech stack with floating animation */}
+          {/* Tech stack with floating animation - JetBrains Mono */}
           <div className="flex flex-wrap gap-2">
             {project.tech.map((tech, i) => (
               <motion.span
@@ -184,7 +186,7 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
                     ease: "easeInOut",
                   }
                 }}
-                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-all cursor-default"
+                className="px-3 py-1.5 rounded-full font-mono text-mono-sm font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-all cursor-default uppercase tracking-wider"
                 style={{ transformStyle: "preserve-3d" }}
               >
                 {tech}
@@ -231,23 +233,26 @@ const ProjectsNew = () => {
       </div>
       
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
+        {/* Header with typography system */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-20 relative"
         >
+          {/* Small mono label */}
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
-            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 text-sm font-medium text-primary mb-6"
+            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 font-mono text-label text-primary tracking-[0.2em] uppercase mb-6"
           >
             🚀 Featured Work
           </motion.span>
           
+          {/* Main heading - Syne Display with 3D depth */}
           <motion.h2 
-            className="text-4xl sm:text-5xl md:text-6xl font-black mb-6"
+            className="font-display text-display-lg font-bold mb-6 tracking-[-0.02em]"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
@@ -269,14 +274,28 @@ const ProjectsNew = () => {
             </span>
           </motion.h2>
           
+          {/* Subtitle - Inter body font */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+            className="font-body text-body-lg text-muted-foreground max-w-2xl mx-auto"
           >
             Showcasing my latest work in web development and design
           </motion.p>
+          
+          {/* Large Bebas watermark */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 0.025, scale: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.5 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider pointer-events-none whitespace-nowrap"
+            style={{ 
+              textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
+            }}
+          >
+            PROJECTS
+          </motion.div>
         </motion.div>
 
         {/* Projects Grid - 3D Perspective Container */}
@@ -307,7 +326,7 @@ const ProjectsNew = () => {
               boxShadow: "0 20px 40px rgba(79, 142, 247, 0.3)",
             }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass border border-primary/30 font-semibold hover:border-primary/60 hover:bg-primary/5 transition-all duration-300"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass border border-primary/30 font-heading font-semibold text-body-md tracking-[0.02em] hover:border-primary/60 hover:bg-primary/5 transition-all duration-300"
             style={{
               transformStyle: "preserve-3d",
               perspective: "1000px",

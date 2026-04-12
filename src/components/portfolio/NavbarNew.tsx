@@ -64,7 +64,7 @@ const NavbarNew = () => {
       >
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-20">
-            {/* Logo */}
+            {/* Logo - Syne Display font */}
             <motion.a
               href="#home"
               onClick={(e) => {
@@ -73,7 +73,7 @@ const NavbarNew = () => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="text-2xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+              className="font-display text-2xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent tracking-tight"
             >
               VR
             </motion.a>
@@ -90,7 +90,7 @@ const NavbarNew = () => {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`relative px-4 py-2 rounded-lg font-heading font-semibold text-body-md tracking-[0.02em] transition-colors ${
                     activeSection === item.href.slice(1)
                       ? "text-[#4F8EF7]"
                       : "text-muted-foreground hover:text-foreground"
@@ -171,7 +171,7 @@ const NavbarNew = () => {
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className={`px-4 py-3 rounded-lg font-medium transition-all ${
+                    className={`px-4 py-3 rounded-lg font-heading font-semibold text-body-md tracking-[0.02em] transition-all ${
                       activeSection === item.href.slice(1)
                         ? "bg-primary/10 text-primary border border-primary/20"
                         : "text-muted-foreground hover:text-foreground hover:bg-primary/5"

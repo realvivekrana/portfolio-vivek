@@ -110,23 +110,26 @@ const ContactNew = () => {
       </div>
       
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
+        {/* Header with typography system */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-20 relative"
         >
+          {/* Small mono label */}
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
-            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 text-sm font-medium text-primary mb-6"
+            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 font-mono text-label text-primary tracking-[0.2em] uppercase mb-6"
           >
             📬 Get In Touch
           </motion.span>
           
+          {/* Main heading - Syne Display with 3D depth */}
           <motion.h2 
-            className="text-4xl sm:text-5xl md:text-6xl font-black mb-6"
+            className="font-display text-display-lg font-bold mb-6 tracking-[-0.02em]"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
@@ -148,14 +151,28 @@ const ContactNew = () => {
             </span>
           </motion.h2>
           
+          {/* Subtitle - Inter body font */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+            className="font-body text-body-lg text-muted-foreground max-w-2xl mx-auto"
           >
             Have a project in mind? Let's create something amazing together
           </motion.p>
+          
+          {/* Large Bebas watermark */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 0.025, scale: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.5 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider pointer-events-none whitespace-nowrap"
+            style={{ 
+              textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
+            }}
+          >
+            CONTACT
+          </motion.div>
         </motion.div>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
@@ -167,8 +184,10 @@ const ContactNew = () => {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-6">Contact Information</h3>
-              <p className="text-muted-foreground mb-8">
+              {/* Heading - Plus Jakarta heading font */}
+              <h3 className="font-heading text-2xl md:text-3xl font-bold mb-6 tracking-tight">Contact Information</h3>
+              {/* Body text - Inter */}
+              <p className="font-body text-body-md text-muted-foreground mb-8">
                 Feel free to reach out through any of these channels. I'm always open to discussing new projects and opportunities.
               </p>
             </div>
@@ -207,8 +226,8 @@ const ContactNew = () => {
                         <item.icon className="w-6 h-6 text-primary" />
                       </motion.div>
                       <div>
-                        <div className="text-sm text-muted-foreground">{item.label}</div>
-                        <div className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <div className="font-mono text-label text-muted-foreground uppercase tracking-wider">{item.label}</div>
+                        <div className="font-heading font-semibold text-body-md text-foreground group-hover:text-primary transition-colors">
                           {item.value}
                         </div>
                       </div>
@@ -219,8 +238,8 @@ const ContactNew = () => {
                         <item.icon className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <div className="text-sm text-muted-foreground">{item.label}</div>
-                        <div className="font-semibold text-foreground">{item.value}</div>
+                        <div className="font-mono text-label text-muted-foreground uppercase tracking-wider">{item.label}</div>
+                        <div className="font-heading font-semibold text-body-md text-foreground">{item.value}</div>
                       </div>
                     </div>
                   )}
@@ -250,7 +269,7 @@ const ContactNew = () => {
               <div>
                 <motion.label 
                   htmlFor="name" 
-                  className="block text-sm font-medium mb-2 transition-all duration-300"
+                  className="block font-heading text-body-sm font-semibold mb-2 transition-all duration-300"
                   animate={{
                     y: focusedField === 'name' ? -5 : 0,
                     scale: focusedField === 'name' ? 0.95 : 1,
@@ -282,7 +301,7 @@ const ContactNew = () => {
               <div>
                 <motion.label 
                   htmlFor="email" 
-                  className="block text-sm font-medium mb-2 transition-all duration-300"
+                  className="block font-heading text-body-sm font-semibold mb-2 transition-all duration-300"
                   animate={{
                     y: focusedField === 'email' ? -5 : 0,
                     scale: focusedField === 'email' ? 0.95 : 1,
@@ -304,7 +323,7 @@ const ContactNew = () => {
                     translateZ: 10,
                     boxShadow: "0 0 20px rgba(79, 142, 247, 0.3)",
                   }}
-                  className="w-full px-4 py-3 rounded-xl glass border border-primary/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full px-4 py-3 rounded-xl glass border border-primary/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body text-body-md"
                   placeholder="john@example.com"
                   style={{ transformStyle: "preserve-3d" }}
                 />
@@ -314,7 +333,7 @@ const ContactNew = () => {
               <div>
                 <motion.label 
                   htmlFor="message" 
-                  className="block text-sm font-medium mb-2 transition-all duration-300"
+                  className="block font-heading text-body-sm font-semibold mb-2 transition-all duration-300"
                   animate={{
                     y: focusedField === 'message' ? -5 : 0,
                     scale: focusedField === 'message' ? 0.95 : 1,
@@ -336,7 +355,7 @@ const ContactNew = () => {
                     translateZ: 10,
                     boxShadow: "0 0 20px rgba(79, 142, 247, 0.3)",
                   }}
-                  className="w-full px-4 py-3 rounded-xl glass border border-primary/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-xl glass border border-primary/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none font-body text-body-md"
                   placeholder="Tell me about your project..."
                   style={{ transformStyle: "preserve-3d" }}
                 />
@@ -356,7 +375,7 @@ const ContactNew = () => {
                   y: buttonSpringY,
                   transformStyle: "preserve-3d",
                 }}
-                className="w-full px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                className="w-full px-8 py-4 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-body-md tracking-[0.05em] uppercase shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
               >
                 {/* Animated background on hover */}
                 <motion.div

@@ -86,6 +86,21 @@ const HeroPremium = () => {
         }}
       />
 
+      {/* Large Bebas Neue background watermark */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.025, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.5 }}
+          className="font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider"
+          style={{ 
+            textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
+          }}
+        >
+          VIVEK RANA
+        </motion.div>
+      </div>
+
       {/* Responsive layout container */}
       <div className="w-full max-w-7xl mx-auto relative z-10 py-20 sm:py-24 md:py-28 lg:py-0">
         <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
@@ -96,19 +111,14 @@ const HeroPremium = () => {
             transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left w-full"
           >
-            {/* Name with responsive sizing + 3D letter animation */}
+            {/* Name with Syne Display font - most important text */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="font-extrabold mb-4 sm:mb-5 md:mb-6 leading-tight"
-              style={{
-                fontSize: 'clamp(32px, 6vw, 72px)',
-                color: '#F0F0FF',
-                letterSpacing: '-2px',
-              }}
+              className="font-display text-display-2xl font-extrabold text-white tracking-[-0.04em] leading-[0.92] mb-4 sm:mb-5 md:mb-6 uppercase"
             >
-              {['V', 'i', 'v', 'e', 'k', ' ', 'R', 'a', 'n', 'a'].map((letter, i) => (
+              {['V', 'I', 'V', 'E', 'K', ' ', 'R', 'A', 'N', 'A'].map((letter, i) => (
                 <motion.span
                   key={i}
                   initial={{ opacity: 0, y: -100, rotateX: 90 }}
@@ -136,21 +146,14 @@ const HeroPremium = () => {
               ))}
             </motion.h1>
 
-            {/* Typewriter with responsive sizing + 3D character flip */}
+            {/* Typewriter role - JetBrains Mono for tech feel */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="mb-6 sm:mb-7 md:mb-8 h-10 sm:h-11 md:h-12 flex items-center justify-center lg:justify-start"
             >
-              <span
-                className="font-semibold"
-                style={{
-                  fontSize: 'clamp(16px, 3vw, 32px)',
-                  color: '#4F8EF7',
-                  fontFamily: 'monospace',
-                }}
-              >
+              <span className="font-mono text-mono-lg font-bold text-[#4F8EF7] tracking-[0.05em] uppercase">
                 {displayText.split('').map((char, i) => (
                   <motion.span
                     key={`${char}-${i}`}
@@ -166,18 +169,12 @@ const HeroPremium = () => {
               </span>
             </motion.div>
 
-            {/* Bio with responsive sizing */}
+            {/* Bio - Inter body font for readability */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="mb-8 sm:mb-9 md:mb-10 mx-auto lg:mx-0 leading-relaxed"
-              style={{
-                fontSize: 'clamp(13px, 1.5vw, 18px)',
-                color: '#6B6B8A',
-                maxWidth: '560px',
-                lineHeight: 1.7,
-              }}
+              className="font-body text-body-lg font-light text-[#8888AA] leading-[1.85] max-w-[520px] mb-8 sm:mb-9 md:mb-10 mx-auto lg:mx-0"
             >
               {personalInfo.bio}
             </motion.p>
@@ -189,12 +186,12 @@ const HeroPremium = () => {
               transition={{ delay: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start max-w-md mx-auto lg:mx-0"
             >
-              {/* View My Work - Solid Blue with 3D press */}
+              {/* View My Work - Plus Jakarta Sans heading font */}
               <motion.button
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
                 whileHover={{ scale: 1.04, rotateX: -5, rotateY: 5 }}
                 whileTap={{ scale: 0.96, translateZ: -10 }}
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg w-full sm:w-auto"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-heading text-body-md font-semibold tracking-[0.05em] uppercase w-full sm:w-auto"
                 style={{
                   background: '#4F8EF7',
                   color: '#FFFFFF',
@@ -216,14 +213,14 @@ const HeroPremium = () => {
                 View My Work
               </motion.button>
 
-              {/* Download CV - Ghost with 3D shine sweep */}
+              {/* Download CV - Plus Jakarta Sans heading font */}
               <motion.a
                 href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.04, rotateX: -5, rotateY: -5 }}
                 whileTap={{ scale: 0.96 }}
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg overflow-hidden w-full sm:w-auto"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-heading text-body-md font-semibold tracking-[0.05em] uppercase overflow-hidden w-full sm:w-auto"
                 style={{
                   background: 'transparent',
                   color: '#F0F0FF',
@@ -391,7 +388,7 @@ const HeroPremium = () => {
               </motion.div>
             </motion.div>
 
-            {/* Available badge - below photo */}
+            {/* Available badge - below photo with mono font */}
             <motion.div
               animate={{ y: [0, -5, 0] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -406,10 +403,10 @@ const HeroPremium = () => {
                 style={{ background: '#00FF64' }}
               />
               <span 
-                className="text-xs sm:text-sm font-medium whitespace-nowrap"
+                className="font-mono text-label tracking-[0.15em] uppercase whitespace-nowrap"
                 style={{ color: '#00FF64' }}
               >
-                Currently Available for Freelance
+                Currently Available
               </span>
             </motion.div>
           </motion.div>
