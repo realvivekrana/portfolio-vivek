@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { ArrowDown, Download, Briefcase } from "lucide-react";
 import profileImg from "@/assets/vivek-profile.jpg";
 import { personalInfo } from "@/data/portfolio-data";
@@ -16,6 +16,16 @@ const HeroPremium = () => {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPhotoHovered, setIsPhotoHovered] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0.5, y: 0.5 });
+  
+  // Mouse position for parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Transform mouse position to rotation
+  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-15, 15]);
 
   // Typewriter effect
   useEffect(() => {
@@ -38,6 +48,25 @@ const HeroPremium = () => {
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex]);
 
+  // Mouse move handler for cursor glow
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      setCursorPosition({ x, y });
+      
+      // Update mouse position for 3D tilt
+      const rect = document.getElementById('home')?.getBoundingClientRect();
+      if (rect) {
+        mouseX.set(e.clientX - rect.left - rect.width / 2);
+        mouseY.set(e.clientY - rect.top - rect.height / 2);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
   const resumeUrl = `${import.meta.env.BASE_URL}${personalInfo.resumePath}`;
 
   return (
@@ -46,11 +75,14 @@ const HeroPremium = () => {
       className="relative min-h-screen flex items-center overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12"
       style={{ background: '#050508' }}
     >
-      {/* Radial spotlight from top-center */}
+      {/* Radial spotlight from top-center + cursor-following glow */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 0%, rgba(79, 142, 247, 0.07) 0%, transparent 50%)',
+          background: `
+            radial-gradient(circle at ${cursorPosition.x * 100}% ${cursorPosition.y * 100}%, rgba(79, 142, 247, 0.15) 0%, transparent 30%),
+            radial-gradient(circle at 50% 0%, rgba(79, 142, 247, 0.07) 0%, transparent 50%)
+          `,
         }}
       />
 
@@ -64,7 +96,7 @@ const HeroPremium = () => {
             transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left w-full"
           >
-            {/* Name with responsive sizing */}
+            {/* Name with responsive sizing + 3D letter animation */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -74,13 +106,37 @@ const HeroPremium = () => {
                 fontSize: 'clamp(32px, 6vw, 72px)',
                 color: '#F0F0FF',
                 letterSpacing: '-2px',
-                textShadow: '0 0 60px rgba(79, 142, 247, 0.3)',
               }}
             >
-              Vivek Rana
+              {['V', 'i', 'v', 'e', 'k', ' ', 'R', 'a', 'n', 'a'].map((letter, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: -100, rotateX: 90 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{
+                    delay: 0.2 + i * 0.05,
+                    duration: 0.8,
+                    type: 'spring',
+                    stiffness: 200,
+                  }}
+                  whileHover={{ 
+                    y: -10, 
+                    scale: 1.2,
+                    color: '#4F8EF7',
+                    textShadow: '0 0 20px rgba(79, 142, 247, 0.8)',
+                  }}
+                  style={{
+                    display: 'inline-block',
+                    textShadow: '0 0 60px rgba(79, 142, 247, 0.3)',
+                    cursor: 'default',
+                  }}
+                >
+                  {letter === ' ' ? '\u00A0' : letter}
+                </motion.span>
+              ))}
             </motion.h1>
 
-            {/* Typewriter with responsive sizing */}
+            {/* Typewriter with responsive sizing + 3D character flip */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -95,7 +151,17 @@ const HeroPremium = () => {
                   fontFamily: 'monospace',
                 }}
               >
-                {displayText}
+                {displayText.split('').map((char, i) => (
+                  <motion.span
+                    key={`${char}-${i}`}
+                    initial={{ opacity: 0, rotateX: 90 }}
+                    animate={{ opacity: 1, rotateX: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'inline-block' }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
                 <span className="animate-pulse">|</span>
               </span>
             </motion.div>
@@ -123,11 +189,11 @@ const HeroPremium = () => {
               transition={{ delay: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start max-w-md mx-auto lg:mx-0"
             >
-              {/* View My Work - Solid Blue */}
+              {/* View My Work - Solid Blue with 3D press */}
               <motion.button
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
+                whileHover={{ scale: 1.04, rotateX: -5, rotateY: 5 }}
+                whileTap={{ scale: 0.96, translateZ: -10 }}
                 className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg w-full sm:w-auto"
                 style={{
                   background: '#4F8EF7',
@@ -136,6 +202,8 @@ const HeroPremium = () => {
                   border: 'none',
                   transition: 'all 0.3s ease',
                   minHeight: '48px',
+                  transformStyle: 'preserve-3d',
+                  perspective: '1000px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow = '0 0 30px rgba(79, 142, 247, 0.5)';
@@ -148,12 +216,12 @@ const HeroPremium = () => {
                 View My Work
               </motion.button>
 
-              {/* Download CV - Ghost with shimmer */}
+              {/* Download CV - Ghost with 3D shine sweep */}
               <motion.a
                 href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.04, rotateX: -5, rotateY: -5 }}
                 whileTap={{ scale: 0.96 }}
                 className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg overflow-hidden w-full sm:w-auto"
                 style={{
@@ -163,6 +231,8 @@ const HeroPremium = () => {
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   transition: 'all 0.3s ease',
                   minHeight: '48px',
+                  transformStyle: 'preserve-3d',
+                  perspective: '1000px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#4F8EF7';
@@ -175,28 +245,42 @@ const HeroPremium = () => {
                   <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Download CV
                 </span>
-                {/* Shimmer sweep */}
+                {/* 3D Shine sweep */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  className="absolute inset-0"
+                  style={{
+                    background: 'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
+                    transform: 'translateZ(1px)',
+                  }}
                   initial={{ x: '-100%' }}
                   whileHover={{ x: '100%' }}
                   transition={{ duration: 0.6 }}
-                  style={{ pointerEvents: 'none' }}
                 />
               </motion.a>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT COLUMN - Photo + Badge */}
+          {/* RIGHT COLUMN - 3D Flip Card Photo + Badge */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex-shrink-0 flex flex-col items-center w-full lg:w-auto"
+            style={{ perspective: '1000px' }}
           >
-            {/* Profile photo with double rings - responsive sizing */}
-            <div
-              className="relative mb-6"
+            {/* 3D Flip Card Container */}
+            <motion.div
+              className="relative mb-6 cursor-pointer"
+              style={{
+                transformStyle: 'preserve-3d',
+                width: 'clamp(110px, 25vw, 180px)',
+                height: 'clamp(110px, 25vw, 180px)',
+              }}
+              animate={{
+                rotateY: isFlipped ? 180 : 0,
+              }}
+              transition={{ duration: 0.6, type: 'spring' }}
+              onClick={() => setIsFlipped(!isFlipped)}
               onMouseEnter={() => setIsPhotoHovered(true)}
               onMouseLeave={() => setIsPhotoHovered(false)}
             >
@@ -211,64 +295,101 @@ const HeroPremium = () => {
                 }}
               />
 
-              {/* Outer ring - pulsing opacity */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  padding: '8px',
-                  background: 'linear-gradient(135deg, #4F8EF7, #9B5DE5, #4F8EF7)',
-                  backgroundSize: '200% 200%',
-                  animation: 'pulse-ring 3s ease-in-out infinite',
-                }}
-              >
-                <div
-                  className="w-full h-full rounded-full"
-                  style={{ background: '#050508' }}
-                />
-              </div>
-
-              {/* Inner ring - rotating gradient */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  padding: '4px',
-                  background: 'linear-gradient(45deg, #4F8EF7, #9B5DE5, #4F8EF7)',
-                  backgroundSize: '200% 200%',
-                  animation: isPhotoHovered 
-                    ? 'gradient-spin 2s linear infinite' 
-                    : 'gradient-spin 4s linear infinite',
-                }}
-              >
-                <div
-                  className="w-full h-full rounded-full"
-                  style={{ background: '#050508' }}
-                />
-              </div>
-
-              {/* Profile image - responsive sizing */}
+              {/* FRONT SIDE - Profile Photo */}
               <motion.div
-                className="relative rounded-full overflow-hidden"
+                className="absolute inset-0"
                 style={{
-                  width: 'clamp(110px, 25vw, 180px)',
-                  height: 'clamp(110px, 25vw, 180px)',
-                  border: '4px solid #050508',
-                  boxShadow: '0 0 40px rgba(79, 142, 247, 0.3)',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
                 }}
-                animate={{ scale: isPhotoHovered ? 1.05 : 1 }}
-                transition={{ duration: 0.3 }}
               >
-                <img
-                  src={profileImg}
-                  alt="Vivek Rana"
-                  className="w-full h-full"
-                  style={{ 
-                    objectFit: 'cover',
-                    objectPosition: 'center top',
+                {/* Outer ring - pulsing opacity */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    padding: '8px',
+                    background: 'linear-gradient(135deg, #4F8EF7, #9B5DE5, #4F8EF7)',
+                    backgroundSize: '200% 200%',
+                    animation: 'pulse-ring 3s ease-in-out infinite',
                   }}
-                  loading="eager"
-                />
+                >
+                  <div
+                    className="w-full h-full rounded-full"
+                    style={{ background: '#050508' }}
+                  />
+                </div>
+
+                {/* Inner ring - rotating gradient */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    padding: '4px',
+                    background: 'linear-gradient(45deg, #4F8EF7, #9B5DE5, #4F8EF7)',
+                    backgroundSize: '200% 200%',
+                    animation: isPhotoHovered 
+                      ? 'gradient-spin 2s linear infinite' 
+                      : 'gradient-spin 4s linear infinite',
+                  }}
+                >
+                  <div
+                    className="w-full h-full rounded-full"
+                    style={{ background: '#050508' }}
+                  />
+                </div>
+
+                {/* Profile image */}
+                <motion.div
+                  className="relative rounded-full overflow-hidden"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: '4px solid #050508',
+                    boxShadow: '0 0 40px rgba(79, 142, 247, 0.3)',
+                  }}
+                  animate={{ scale: isPhotoHovered ? 1.05 : 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={profileImg}
+                    alt="Vivek Rana"
+                    className="w-full h-full"
+                    style={{ 
+                      objectFit: 'cover',
+                      objectPosition: 'center top',
+                    }}
+                    loading="eager"
+                  />
+                </motion.div>
               </motion.div>
-            </div>
+
+              {/* BACK SIDE - Skills Summary */}
+              <motion.div
+                className="absolute inset-0 rounded-full flex items-center justify-center p-6"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  background: 'linear-gradient(135deg, rgba(79, 142, 247, 0.2), rgba(155, 93, 229, 0.2))',
+                  border: '2px solid rgba(79, 142, 247, 0.5)',
+                  backdropFilter: 'blur(20px)',
+                }}
+              >
+                <div className="text-center">
+                  <p className="text-xs font-bold text-primary mb-2">Quick Skills</p>
+                  <div className="flex flex-wrap gap-1 justify-center">
+                    {['React', 'Node.js', 'MongoDB', 'TypeScript'].map((skill, i) => (
+                      <span
+                        key={i}
+                        className="text-[8px] px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-[8px] text-muted-foreground mt-2">Click to flip back</p>
+                </div>
+              </motion.div>
+            </motion.div>
 
             {/* Available badge - below photo */}
             <motion.div

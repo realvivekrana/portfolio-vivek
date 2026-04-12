@@ -7,14 +7,14 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [glarePosition, setGlarePosition] = useState({ x: 50, y: 50 });
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 300, damping: 30 });
 
-  // Detect touch device
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
@@ -26,8 +26,16 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    mouseX.set((e.clientX - centerX) / rect.width);
-    mouseY.set((e.clientY - centerY) / rect.height);
+    const x = (e.clientX - centerX) / rect.width;
+    const y = (e.clientY - centerY) / rect.height;
+    
+    mouseX.set(x);
+    mouseY.set(y);
+    
+    // Update glare position for holographic effect
+    const glareX = ((e.clientX - rect.left) / rect.width) * 100;
+    const glareY = ((e.clientY - rect.top) / rect.height) * 100;
+    setGlarePosition({ x: glareX, y: glareY });
   };
 
   const handleMouseLeave = () => {
@@ -40,21 +48,45 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
   return (
     <motion.div
       ref={cardRef}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 50, rotateX: 45 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ delay: index * 0.1, duration: 0.6 }}
+      transition={{ 
+        delay: index * 0.1, 
+        duration: 0.8,
+        type: "spring",
+        stiffness: 100,
+      }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => !isTouchDevice && setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
+      whileHover={!isTouchDevice ? { 
+        scale: 1.05, 
+        translateZ: 50,
+      } : {}}
       style={{
         rotateX: isTouchDevice ? 0 : rotateX,
         rotateY: isTouchDevice ? 0 : rotateY,
         transformStyle: isTouchDevice ? 'flat' : 'preserve-3d',
+        perspective: isTouchDevice ? 'none' : '1000px',
       }}
       className="group relative"
     >
-      <div className="glass rounded-3xl overflow-hidden border border-primary/10 hover:border-primary/30 transition-all duration-500 h-full">
+      <div className="glass rounded-3xl overflow-hidden border border-primary/10 hover:border-primary/30 transition-all duration-500 h-full relative">
+        {/* Holographic glare effect - follows mouse */}
+        {isHovered && !isTouchDevice && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none z-20"
+            style={{
+              background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(79, 142, 247, 0.4) 0%, rgba(155, 93, 229, 0.2) 25%, transparent 50%)`,
+              mixBlendMode: 'overlay',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+
         {/* Image with overlay */}
         <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
           <motion.img
@@ -69,10 +101,13 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-60" />
           
-          {/* Hover overlay with buttons */}
+          {/* Hover overlay with 3D buttons */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: isHovered ? 1 : 0,
+              y: isHovered ? 0 : 20,
+            }}
             transition={{ duration: 0.3 }}
             className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center gap-4"
           >
@@ -81,11 +116,14 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.15, rotate: 5 }}
+                whileTap={{ scale: 0.9, translateZ: -10 }}
                 className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg hover:shadow-primary/50 transition-all"
                 aria-label="Live Demo"
-                style={{ transform: "translateZ(50px)" }}
+                style={{ 
+                  transform: "translateZ(50px)",
+                  transformStyle: "preserve-3d",
+                }}
               >
                 <ExternalLink className="w-6 h-6" />
               </motion.a>
@@ -95,11 +133,14 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.15, rotate: -5 }}
+                whileTap={{ scale: 0.9, translateZ: -10 }}
                 className="w-14 h-14 rounded-full glass border-2 border-primary/30 flex items-center justify-center hover:border-primary/60 hover:bg-primary/10 transition-all"
                 aria-label="GitHub Repository"
-                style={{ transform: "translateZ(50px)" }}
+                style={{ 
+                  transform: "translateZ(50px)",
+                  transformStyle: "preserve-3d",
+                }}
               >
                 <Github className="w-6 h-6" />
               </motion.a>
@@ -117,17 +158,34 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
             {project.description}
           </p>
           
-          {/* Tech stack */}
+          {/* Tech stack with floating animation */}
           <div className="flex flex-wrap gap-2">
             {project.tech.map((tech, i) => (
               <motion.span
                 key={tech}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 + i * 0.05 }}
-                whileHover={{ scale: 1.1, y: -2 }}
+                transition={{ 
+                  delay: index * 0.1 + i * 0.05,
+                  type: "spring",
+                  stiffness: 200,
+                }}
+                whileHover={{ 
+                  scale: 1.15, 
+                  y: -5,
+                  boxShadow: "0 5px 15px rgba(79, 142, 247, 0.4)",
+                }}
+                animate={{
+                  y: [0, -3, 0],
+                  transition: {
+                    duration: 2 + i * 0.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }
+                }}
                 className="px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-all cursor-default"
+                style={{ transformStyle: "preserve-3d" }}
               >
                 {tech}
               </motion.span>
@@ -156,6 +214,22 @@ const ProjectsNew = () => {
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background" />
       
+      {/* Floating shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-40 right-20 w-40 h-40 border-2 border-accent/20 rounded-full"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </div>
+      
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -172,25 +246,50 @@ const ProjectsNew = () => {
             🚀 Featured Work
           </motion.span>
           
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6">
-            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+          <motion.h2 
+            className="text-4xl sm:text-5xl md:text-6xl font-black mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3 }}
+          >
+            <span 
+              className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
+              style={{
+                textShadow: `
+                  1px 1px 0 #1a1a2e,
+                  2px 2px 0 #1a1a2e,
+                  3px 3px 0 #1a1a2e,
+                  4px 4px 0 #0d0d14,
+                  5px 5px 0 #0d0d14,
+                  6px 6px 0 #0d0d14
+                `,
+              }}
+            >
               Selected Projects
             </span>
-          </h2>
+          </motion.h2>
           
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.4 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+          >
             Showcasing my latest work in web development and design
-          </p>
+          </motion.p>
         </motion.div>
 
-        {/* Projects Grid - Responsive */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+        {/* Projects Grid - 3D Perspective Container */}
+        <div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto"
+          style={{ perspective: "1200px" }}
+        >
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
 
-        {/* View More CTA */}
+        {/* View More CTA with 3D effect */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -201,9 +300,18 @@ const ProjectsNew = () => {
             href={socialLinks.github}
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ 
+              scale: 1.05,
+              rotateX: -5,
+              rotateY: 5,
+              boxShadow: "0 20px 40px rgba(79, 142, 247, 0.3)",
+            }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass border border-primary/30 font-semibold hover:border-primary/60 hover:bg-primary/5 transition-all duration-300"
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
           >
             <Eye className="w-5 h-5" />
             View All Projects on GitHub
