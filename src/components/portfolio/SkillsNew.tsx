@@ -1,11 +1,15 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import SkillsSphere from "@/components/3d/SkillsSphere";
+import { useRef, useState, useEffect, lazy, Suspense } from "react";
 import { skills } from "@/data/portfolio-data";
+
+// Lazy load the 3D Skills Sphere
+const SkillsSphere = lazy(() => import("@/components/3d/SkillsSphere"));
 
 const SkillsNew = () => {
   const ref = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [shouldLoad3D, setShouldLoad3D] = useState(false);
 
   const allSkills = [
     ...skills.frontend.map(s => ({ ...s, category: "Frontend" })),
@@ -13,8 +17,27 @@ const SkillsNew = () => {
     ...skills.database.map(s => ({ ...s, category: "Database" })),
   ];
 
+  // Load 3D sphere only when section is near viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad3D(true);
+          observer.disconnect(); // Load once, never unload
+        }
+      },
+      { rootMargin: '300px' } // Preload 300px before visible
+    );
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="skills" className="relative py-20 md:py-32 overflow-hidden">
+    <section id="skills" ref={sectionRef} className="relative py-20 md:py-32 overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
       
@@ -113,14 +136,33 @@ const SkillsNew = () => {
           </motion.div>
         </motion.div>
 
-        {/* 3D Skills Orbit Sphere */}
+        {/* 3D Skills Orbit Sphere - Lazy loaded when in viewport */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mb-20"
         >
-          <SkillsSphere />
+          {shouldLoad3D ? (
+            <Suspense fallback={
+              <div style={{ 
+                height: '400px', 
+                display: 'flex',
+                alignItems: 'center', 
+                justifyContent: 'center',
+                color: '#4F8EF7', 
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '14px',
+                letterSpacing: '0.1em'
+              }}>
+                Loading 3D...
+              </div>
+            }>
+              <SkillsSphere />
+            </Suspense>
+          ) : (
+            <div style={{ height: '400px' }} />
+          )}
         </motion.div>
 
         {/* Stats Section with 3D Cards */}

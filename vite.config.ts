@@ -19,52 +19,73 @@ export default defineConfig(() => ({
     },
   },
   build: {
-    // Raise warning limit while we optimize chunks
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 700,
+    target: 'esnext',
+    minify: 'esbuild',
+    cssMinify: true,
     
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React core — separate chunk
-          'vendor-react': [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            '@tanstack/react-query'
-          ],
+        manualChunks(id) {
+          // React core
+          if (id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/react-router-dom/')) {
+            return 'vendor-react';
+          }
           
-          // Three.js — biggest library, own chunk
-          'vendor-three': [
-            'three',
-            '@react-three/fiber',
-            '@react-three/drei'
-          ],
+          // Three.js — isolated (biggest library)
+          if (id.includes('node_modules/three/') ||
+              id.includes('node_modules/three-mesh-bvh/') ||
+              id.includes('node_modules/@monogrid/')) {
+            return 'vendor-three';
+          }
           
-          // Animation libraries — own chunk
-          'vendor-animation': [
-            'framer-motion',
-            'gsap'
-          ],
+          // React Three Fiber + Drei
+          if (id.includes('node_modules/@react-three/')) {
+            return 'vendor-r3f';
+          }
           
-          // UI components — own chunk
-          'vendor-ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-popover',
-            '@radix-ui/react-tooltip',
-            '@radix-ui/react-toast',
-            '@radix-ui/react-slot',
-            '@radix-ui/react-label'
-          ],
+          // Framer Motion
+          if (id.includes('node_modules/framer-motion/')) {
+            return 'vendor-framer';
+          }
           
-          // Form libraries — own chunk
-          'vendor-form': [
-            'react-hook-form',
-            '@hookform/resolvers',
-            'zod'
-          ],
+          // GSAP
+          if (id.includes('node_modules/gsap/')) {
+            return 'vendor-gsap';
+          }
+          
+          // All other node_modules
+          if (id.includes('node_modules/')) {
+            return 'vendor-misc';
+          }
+        },
+        
+        // Clean filenames
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          // Fonts → own folder
+          if (/\.(woff2?|ttf|eot)$/.test(assetInfo.name ?? '')) {
+            return 'assets/fonts/[name]-[hash][extname]';
+          }
+          // Images → own folder
+          if (/\.(png|jpe?g|webp|gif|svg)$/.test(assetInfo.name ?? '')) {
+            return 'assets/images/[name]-[hash][extname]';
+          }
+          // CSS
+          if (/\.css$/.test(assetInfo.name ?? '')) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
         },
       },
     },
+  },
+  
+  optimizeDeps: {
+    include: ['three', '@react-three/fiber', '@react-three/drei'],
+    exclude: [],
   },
 }));
