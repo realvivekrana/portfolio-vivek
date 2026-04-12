@@ -1,11 +1,12 @@
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState, MouseEvent } from "react";
+import { useRef, useState, MouseEvent, useEffect } from "react";
 import { ExternalLink, Github, Eye } from "lucide-react";
 import { projects, socialLinks } from "@/data/portfolio-data";
 
 const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -13,8 +14,13 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
 
+  // Detect touch device
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isTouchDevice || !cardRef.current) return;
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -25,6 +31,7 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
   };
 
   const handleMouseLeave = () => {
+    if (isTouchDevice) return;
     mouseX.set(0);
     mouseY.set(0);
     setIsHovered(false);
@@ -38,12 +45,12 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
       viewport={{ once: true, margin: "-100px" }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => !isTouchDevice && setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
+        rotateX: isTouchDevice ? 0 : rotateX,
+        rotateY: isTouchDevice ? 0 : rotateY,
+        transformStyle: isTouchDevice ? 'flat' : 'preserve-3d',
       }}
       className="group relative"
     >
@@ -176,8 +183,8 @@ const ProjectsNew = () => {
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {/* Projects Grid - Responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}

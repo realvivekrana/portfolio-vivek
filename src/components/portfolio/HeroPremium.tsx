@@ -43,7 +43,7 @@ const HeroPremium = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-screen flex items-center overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12"
       style={{ background: '#050508' }}
     >
       {/* Radial spotlight from top-center */}
@@ -54,45 +54,43 @@ const HeroPremium = () => {
         }}
       />
 
-      {/* Two-column layout */}
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="flex items-center gap-16 max-w-7xl mx-auto">
+      {/* Responsive layout container */}
+      <div className="w-full max-w-7xl mx-auto relative z-10 py-20 sm:py-24 md:py-28 lg:py-0">
+        <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
           {/* LEFT COLUMN - Text Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex-1"
+            className="flex-1 text-center lg:text-left w-full"
           >
-            {/* Name with glow */}
+            {/* Name with responsive sizing */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="font-extrabold mb-4 sm:mb-5 md:mb-6 leading-tight"
               style={{
-                fontSize: '72px',
-                fontWeight: 800,
+                fontSize: 'clamp(32px, 6vw, 72px)',
                 color: '#F0F0FF',
                 letterSpacing: '-2px',
-                marginBottom: '24px',
-                lineHeight: 1.1,
                 textShadow: '0 0 60px rgba(79, 142, 247, 0.3)',
               }}
             >
               Vivek Rana
             </motion.h1>
 
-            {/* Typewriter with blinking cursor */}
+            {/* Typewriter with responsive sizing */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="mb-8 h-12 flex items-center"
+              className="mb-6 sm:mb-7 md:mb-8 h-10 sm:h-11 md:h-12 flex items-center justify-center lg:justify-start"
             >
               <span
+                className="font-semibold"
                 style={{
-                  fontSize: '32px',
-                  fontWeight: 600,
+                  fontSize: 'clamp(16px, 3vw, 32px)',
                   color: '#4F8EF7',
                   fontFamily: 'monospace',
                 }}
@@ -102,41 +100,42 @@ const HeroPremium = () => {
               </span>
             </motion.div>
 
-            {/* Bio */}
+            {/* Bio with responsive sizing */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
+              className="mb-8 sm:mb-9 md:mb-10 mx-auto lg:mx-0 leading-relaxed"
               style={{
-                fontSize: '18px',
+                fontSize: 'clamp(13px, 1.5vw, 18px)',
                 color: '#6B6B8A',
                 maxWidth: '560px',
-                marginBottom: '40px',
                 lineHeight: 1.7,
               }}
             >
               {personalInfo.bio}
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Stack on mobile, side by side on tablet+ */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex gap-4"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start max-w-md mx-auto lg:mx-0"
             >
               {/* View My Work - Solid Blue */}
               <motion.button
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                className="group relative px-8 py-4 font-semibold text-lg"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg w-full sm:w-auto"
                 style={{
                   background: '#4F8EF7',
                   color: '#FFFFFF',
                   borderRadius: '50px',
                   border: 'none',
                   transition: 'all 0.3s ease',
+                  minHeight: '48px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow = '0 0 30px rgba(79, 142, 247, 0.5)';
@@ -145,7 +144,7 @@ const HeroPremium = () => {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <Briefcase className="inline-block w-5 h-5 mr-2" />
+                <Briefcase className="inline-block w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 View My Work
               </motion.button>
 
@@ -156,13 +155,14 @@ const HeroPremium = () => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                className="group relative px-8 py-4 font-semibold text-lg overflow-hidden"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-semibold text-base sm:text-lg overflow-hidden w-full sm:w-auto"
                 style={{
                   background: 'transparent',
                   color: '#F0F0FF',
                   borderRadius: '50px',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   transition: 'all 0.3s ease',
+                  minHeight: '48px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#4F8EF7';
@@ -171,8 +171,8 @@ const HeroPremium = () => {
                   e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                <span className="relative z-10 flex items-center">
-                  <Download className="w-5 h-5 mr-2" />
+                <span className="relative z-10 flex items-center justify-center">
+                  <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Download CV
                 </span>
                 {/* Shimmer sweep */}
@@ -189,13 +189,12 @@ const HeroPremium = () => {
 
           {/* RIGHT COLUMN - Photo + Badge */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex-shrink-0 flex flex-col items-center"
-            style={{ width: '400px' }}
+            className="flex-shrink-0 flex flex-col items-center w-full lg:w-auto"
           >
-            {/* Profile photo with double rings */}
+            {/* Profile photo with double rings - responsive sizing */}
             <div
               className="relative mb-6"
               onMouseEnter={() => setIsPhotoHovered(true)}
@@ -246,12 +245,12 @@ const HeroPremium = () => {
                 />
               </div>
 
-              {/* Profile image */}
+              {/* Profile image - responsive sizing */}
               <motion.div
                 className="relative rounded-full overflow-hidden"
                 style={{
-                  width: '180px',
-                  height: '180px',
+                  width: 'clamp(110px, 25vw, 180px)',
+                  height: 'clamp(110px, 25vw, 180px)',
                   border: '4px solid #050508',
                   boxShadow: '0 0 40px rgba(79, 142, 247, 0.3)',
                 }}
@@ -266,6 +265,7 @@ const HeroPremium = () => {
                     objectFit: 'cover',
                     objectPosition: 'center top',
                   }}
+                  loading="eager"
                 />
               </motion.div>
             </div>
@@ -274,17 +274,20 @@ const HeroPremium = () => {
             <motion.div
               animate={{ y: [0, -5, 0] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full"
               style={{
                 background: 'rgba(0, 255, 100, 0.08)',
                 border: '1px solid rgba(0, 255, 100, 0.3)',
               }}
             >
               <span
-                className="w-2 h-2 rounded-full animate-pulse"
+                className="w-2 h-2 rounded-full animate-pulse flex-shrink-0"
                 style={{ background: '#00FF64' }}
               />
-              <span style={{ color: '#00FF64', fontSize: '14px', fontWeight: 500 }}>
+              <span 
+                className="text-xs sm:text-sm font-medium whitespace-nowrap"
+                style={{ color: '#00FF64' }}
+              >
                 Currently Available for Freelance
               </span>
             </motion.div>
@@ -297,7 +300,7 @@ const HeroPremium = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
       >
         <motion.button
           onClick={() => document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" })}
