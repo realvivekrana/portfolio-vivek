@@ -9,7 +9,6 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 // Lazy load heavy components
 const IndexNew = lazy(() => import("./pages/IndexNew"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const LoadingScreen = lazy(() => import("./components/ui/LoadingScreen"));
 const Cursor = lazy(() => import("./components/ui/Cursor"));
 const ScrollProgress = lazy(() => import("./components/ui/ScrollProgress"));
 const BackgroundScene = lazy(() => import("./components/3d/BackgroundScene"));
@@ -60,12 +59,7 @@ const AppFallback = () => (
 );
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [ready, setReady] = useState(false);
-
-  const handleLoadingComplete = () => {
-    setIsLoading(false);
-  };
 
   useEffect(() => {
     // Small delay so critical UI renders first
@@ -78,10 +72,6 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Suspense fallback={<LoadingFallback />}>
-            {/* Loading Screen */}
-            <ErrorBoundary name="LoadingScreen">
-              {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-            </ErrorBoundary>
             
             {/* 3D Background Scene - if it crashes, rest of app still works */}
             <ErrorBoundary name="BackgroundScene">
