@@ -27,33 +27,31 @@ export default defineConfig(() => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // React core
-          if (id.includes('node_modules/react/') ||
-              id.includes('node_modules/react-dom/') ||
-              id.includes('node_modules/react-router-dom/')) {
+          // React core - MUST stay together
+          if (id.includes('node_modules/react') || 
+              id.includes('node_modules/react-dom') ||
+              id.includes('node_modules/scheduler')) {
             return 'vendor-react';
           }
           
-          // Three.js — isolated (biggest library)
-          if (id.includes('node_modules/three/') ||
-              id.includes('node_modules/three-mesh-bvh/') ||
-              id.includes('node_modules/@monogrid/')) {
+          // React Router
+          if (id.includes('node_modules/react-router')) {
+            return 'vendor-react';
+          }
+          
+          // Three.js
+          if (id.includes('node_modules/three')) {
             return 'vendor-three';
           }
           
           // React Three Fiber + Drei
-          if (id.includes('node_modules/@react-three/')) {
+          if (id.includes('node_modules/@react-three')) {
             return 'vendor-r3f';
           }
           
           // Framer Motion
-          if (id.includes('node_modules/framer-motion/')) {
+          if (id.includes('node_modules/framer-motion')) {
             return 'vendor-framer';
-          }
-          
-          // GSAP
-          if (id.includes('node_modules/gsap/')) {
-            return 'vendor-gsap';
           }
           
           // All other node_modules
