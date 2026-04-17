@@ -30,10 +30,28 @@ if (!rootElement) {
   throw new Error('Root element #root not found in index.html');
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </StrictMode>
-);
+// Add error logging
+console.log('🚀 Starting React app...');
+console.log('Root element found:', rootElement);
+
+try {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </StrictMode>
+  );
+  console.log('✅ React app rendered successfully');
+} catch (error) {
+  console.error('❌ Failed to render React app:', error);
+  document.body.innerHTML = `
+    <div style="background:#050508;min-height:100vh;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;
+    color:#F0F0FF;font-family:monospace;padding:20px;text-align:center">
+      <div style="font-size:48px;color:#4F8EF7;margin-bottom:20px">⚠️</div>
+      <div style="font-size:18px;margin-bottom:10px">Failed to load portfolio</div>
+      <div style="font-size:12px;color:#6B6B8A;max-width:600px">${error}</div>
+    </div>
+  `;
+}

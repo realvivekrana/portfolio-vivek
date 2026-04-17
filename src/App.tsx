@@ -9,11 +9,15 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 // Lazy load heavy components
 const IndexNew = lazy(() => import("./pages/IndexNew"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Cursor = lazy(() => import("./components/ui/Cursor"));
-const ScrollProgress = lazy(() => import("./components/ui/ScrollProgress"));
-const BackgroundScene = lazy(() => import("./components/3d/BackgroundScene"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -59,35 +63,13 @@ const AppFallback = () => (
 );
 
 const App = () => {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    // Small delay so critical UI renders first
-    const t = setTimeout(() => setReady(true), 200);
-    return () => clearTimeout(t);
-  }, []);
+  console.log('🎨 App component rendering...');
 
   return (
     <ErrorBoundary name="App-Root" fallback={<AppFallback />}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Suspense fallback={<LoadingFallback />}>
-            
-            {/* 3D Background Scene - if it crashes, rest of app still works */}
-            <ErrorBoundary name="BackgroundScene">
-              {ready && <BackgroundScene />}
-            </ErrorBoundary>
-            
-            {/* Custom 3D Cursor - non-critical */}
-            <ErrorBoundary name="Cursor">
-              <Cursor />
-            </ErrorBoundary>
-            
-            {/* Scroll Progress Indicator - non-critical */}
-            <ErrorBoundary name="ScrollProgress">
-              <ScrollProgress />
-            </ErrorBoundary>
-            
             {/* Toast Notifications */}
             <ErrorBoundary name="Toaster">
               <Toaster />

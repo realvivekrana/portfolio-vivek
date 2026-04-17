@@ -8,9 +8,6 @@ const SkillsNew = lazy(() => import("@/components/portfolio/SkillsNew"));
 const ProjectsNew = lazy(() => import("@/components/portfolio/ProjectsNew"));
 const ContactNew = lazy(() => import("@/components/portfolio/ContactNew"));
 const Footer = lazy(() => import("@/components/portfolio/Footer"));
-const LoadingScreen = lazy(() => import("@/components/portfolio/LoadingScreen"));
-const CustomCursor = lazy(() => import("@/components/CustomCursor"));
-const ParticleField = lazy(() => import("@/components/ParticleField"));
 
 // Section loading fallback
 const SectionLoader = () => (
@@ -30,12 +27,6 @@ const SectionLoader = () => (
 const IndexNew = () => {
   return (
     <div className="overflow-x-hidden w-full" style={{ background: '#050508' }}>
-      <Suspense fallback={null}>
-        <CustomCursor />
-        <ParticleField />
-        <LoadingScreen />
-      </Suspense>
-      
       <NavbarNew />
       
       <main className="w-full relative z-10">
