@@ -1,6 +1,5 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 import {
   Mail, MapPin, Phone, Send, CheckCircle,
   AlertCircle, Github, Linkedin, Twitter,
@@ -8,89 +7,96 @@ import {
 import { personalInfo } from "@/data/portfolio-data";
 
 // ─────────────────────────────────────────────────────────────
-// EmailJS config — replace these three values with your own:
-//
-//  1. Go to https://www.emailjs.com  →  sign up (free)
-//  2. Add an Email Service  →  copy SERVICE_ID
-//  3. Create an Email Template with variables:
-//       {{from_name}}  {{from_email}}  {{message}}  {{to_name}}
-//     →  copy TEMPLATE_ID
-//  4. Account → API Keys  →  copy PUBLIC_KEY
+// Formspree — zero setup, messages go straight to your Gmail.
+// HOW IT WORKS:
+//   1. First form submission will ask you to confirm your email
+//   2. Click the confirmation link in your Gmail inbox
+//   3. All future submissions arrive in your inbox instantly
 // ─────────────────────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = "service_5ek5x96i";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // ← Go to EmailJS → Email Templates → copy ID
-const EMAILJS_PUBLIC_KEY  = "O03STzf4wGjZ_XQQpUjgpYmijkISBEy6YNQf4";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwzgkqb";
 
 type Status = "idle" | "sending" | "success" | "error";
 
 const ContactNew = () => {
   const ref    = useRef<HTMLDivElement>(null);
-  const formEl = useRef<HTMLFormElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const [form, setForm]     = useState({ name: "", email: "", message: "" });
+  const [form, setForm]     = useState({ name: "", email: "", subject: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [errMsg, setErrMsg] = useState("");
 
-  /* ── Validation ── */
-  const validate = () => {
+  /* ── Client-side validation ── */
+  const validate = (): string | null => {
     if (!form.name.trim())    return "Please enter your name.";
     if (!form.email.trim())   return "Please enter your email.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
                               return "Please enter a valid email address.";
-    if (!form.message.trim()) return "Please enter a message.";
+    if (!form.message.trim()) return "Please write a message.";
     if (form.message.trim().length < 10)
                               return "Message must be at least 10 characters.";
     return null;
   };
 
-  /* ── Submit ── */
+  /* ── Submit via Formspree ── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationError = validate();
-    if (validationError) {
-      setErrMsg(validationError);
-      setStatus("error");
-      return;
-    }
+    const err = validate();
+    if (err) { setErrMsg(err); setStatus("error"); return; }
 
     setStatus("sending");
     setErrMsg("");
 
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name:  form.name.trim(),
-          from_email: form.email.trim(),
-          message:    form.message.trim(),
-          to_name:    "Vivek",
-          reply_to:   form.email.trim(),
-        },
-        EMAILJS_PUBLIC_KEY,
-      );
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name:    form.name.trim(),
+          email:   form.email.trim(),
+          subject: form.subject.trim() || "Portfolio Contact",
+          message: form.message.trim(),
+          _replyto: form.email.trim(),
+        }),
+      });
 
-      setStatus("success");
-      setForm({ name: "", email: "", message: "" });
-      // Reset back to idle after 5 s
-      setTimeout(() => setStatus("idle"), 5000);
+      if (res.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => setStatus("idle"), 6000);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`);
+      }
     } catch (err: unknown) {
-      console.error("EmailJS error:", err);
-      setErrMsg("Something went wrong. Please try emailing me directly.");
+      console.error("Form error:", err);
+      setErrMsg("Failed to send. Please email me directly at vivekranaworks@gmail.com");
       setStatus("error");
     }
   };
 
-  /* ── Helpers ── */
-  const inputStyle = {
+  /* ── Shared styles ── */
+  const inputBase: React.CSSProperties = {
+    width: "100%",
+    padding: "0.75rem 1rem",
+    borderRadius: "0.75rem",
     background: "rgba(255,255,255,0.04)",
     border: "1px solid rgba(79,142,247,0.18)",
     color: "#F0F0FF",
+    fontSize: "0.9rem",
+    outline: "none",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    fontFamily: "Inter, sans-serif",
   };
-  const focusStyle  = "rgba(79,142,247,0.55)";
-  const blurStyle   = "rgba(79,142,247,0.18)";
+
+  const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.target.style.borderColor = "rgba(79,142,247,0.6)";
+    e.target.style.boxShadow   = "0 0 0 3px rgba(79,142,247,0.1)";
+  };
+  const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.target.style.borderColor = "rgba(79,142,247,0.18)";
+    e.target.style.boxShadow   = "none";
+  };
 
   const contactItems = [
     { icon: Mail,   label: "Email",    value: personalInfo.email,    href: `mailto:${personalInfo.email}` },
@@ -99,9 +105,9 @@ const ContactNew = () => {
   ];
 
   const socials = [
-    { icon: Github,   href: "https://github.com/realvivekrana",          label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/",  label: "LinkedIn" },
-    { icon: Twitter,  href: "https://x.com/mrvivaanrana",                label: "Twitter" },
+    { icon: Github,   href: "https://github.com/realvivekrana",         label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
+    { icon: Twitter,  href: "https://x.com/mrvivaanrana",               label: "Twitter" },
   ];
 
   return (
@@ -117,7 +123,7 @@ const ContactNew = () => {
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
 
-        {/* ── Section header ── */}
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -125,7 +131,7 @@ const ContactNew = () => {
           className="text-center mb-12 sm:mb-16"
         >
           <p
-            className="text-xs sm:text-sm font-mono tracking-[0.25em] uppercase mb-3"
+            className="text-xs sm:text-sm tracking-[0.25em] uppercase mb-3"
             style={{ color: "#4F8EF7", fontFamily: "JetBrains Mono, monospace" }}
           >
             📬 Get In Touch
@@ -135,13 +141,11 @@ const ContactNew = () => {
             style={{ fontSize: "clamp(2rem, 6vw, 3.5rem)", color: "#F0F0FF" }}
           >
             Let's Work{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
+            <span style={{
+              background: "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}>
               Together
             </span>
           </h2>
@@ -150,10 +154,7 @@ const ContactNew = () => {
             animate={inView ? { scaleX: 1 } : {}}
             transition={{ delay: 0.3, duration: 0.5 }}
             className="w-16 h-1 mx-auto rounded-full"
-            style={{
-              background: "linear-gradient(90deg, #4F8EF7, #9B5DE5)",
-              transformOrigin: "center",
-            }}
+            style={{ background: "linear-gradient(90deg, #4F8EF7, #9B5DE5)", transformOrigin: "center" }}
           />
           <p className="mt-4 text-sm sm:text-base max-w-xl mx-auto" style={{ color: "#6B6B8A" }}>
             Have a project in mind? Let's create something amazing together.
@@ -194,17 +195,13 @@ const ContactNew = () => {
                     onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(79,142,247,0.3)")}
                     onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(79,142,247,0.1)")}
                   >
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(79,142,247,0.1)" }}
-                    >
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: "rgba(79,142,247,0.1)" }}>
                       <item.icon size={20} style={{ color: "#4F8EF7" }} />
                     </div>
                     <div>
-                      <div
-                        className="text-xs font-mono tracking-widest uppercase mb-0.5"
-                        style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}
-                      >
+                      <div className="text-xs tracking-widest uppercase mb-0.5"
+                        style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}>
                         {item.label}
                       </div>
                       <div className="text-sm sm:text-base font-semibold" style={{ color: "#C8C8E8" }}>
@@ -213,21 +210,15 @@ const ContactNew = () => {
                     </div>
                   </a>
                 ) : (
-                  <div
-                    className="flex items-center gap-4 p-4 rounded-2xl"
-                    style={{ background: "rgba(79,142,247,0.04)", border: "1px solid rgba(79,142,247,0.1)" }}
-                  >
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(79,142,247,0.1)" }}
-                    >
+                  <div className="flex items-center gap-4 p-4 rounded-2xl"
+                    style={{ background: "rgba(79,142,247,0.04)", border: "1px solid rgba(79,142,247,0.1)" }}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: "rgba(79,142,247,0.1)" }}>
                       <item.icon size={20} style={{ color: "#4F8EF7" }} />
                     </div>
                     <div>
-                      <div
-                        className="text-xs font-mono tracking-widest uppercase mb-0.5"
-                        style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}
-                      >
+                      <div className="text-xs tracking-widest uppercase mb-0.5"
+                        style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}>
                         {item.label}
                       </div>
                       <div className="text-sm sm:text-base font-semibold" style={{ color: "#C8C8E8" }}>
@@ -239,30 +230,18 @@ const ContactNew = () => {
               </motion.div>
             ))}
 
-            {/* Social links */}
+            {/* Socials */}
             <div className="pt-2">
-              <p
-                className="text-xs font-mono tracking-widest uppercase mb-3"
-                style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}
-              >
+              <p className="text-xs tracking-widest uppercase mb-3"
+                style={{ color: "#4B4B6A", fontFamily: "JetBrains Mono, monospace" }}>
                 Follow Me
               </p>
               <div className="flex gap-3">
                 {socials.map(({ icon: Icon, href, label }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
+                  <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                    aria-label={label} whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}
                     className="w-11 h-11 rounded-xl flex items-center justify-center transition-all"
-                    style={{
-                      background: "rgba(79,142,247,0.08)",
-                      border: "1px solid rgba(79,142,247,0.15)",
-                      color: "#8888AA",
-                    }}
+                    style={{ background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.15)", color: "#8888AA" }}
                     onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#4F8EF7")}
                     onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "#8888AA")}
                   >
@@ -281,109 +260,73 @@ const ContactNew = () => {
             className="rounded-2xl p-5 sm:p-6"
             style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(79,142,247,0.1)" }}
           >
-            <form ref={formEl} onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
 
               {/* Name */}
               <div>
-                <label
-                  htmlFor="cf-name"
-                  className="block text-xs sm:text-sm font-semibold mb-1.5"
-                  style={{ color: "#C8C8E8" }}
-                >
+                <label htmlFor="cf-name" className="block text-xs sm:text-sm font-semibold mb-1.5"
+                  style={{ color: "#C8C8E8" }}>
                   Your Name <span style={{ color: "#9B5DE5" }}>*</span>
                 </label>
                 <input
-                  id="cf-name"
-                  type="text"
-                  name="from_name"
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                  placeholder="John Doe"
-                  autoComplete="name"
-                  className="w-full px-4 py-3 rounded-xl text-sm sm:text-base outline-none transition-all"
-                  style={inputStyle}
-                  onFocus={e => (e.target.style.borderColor = focusStyle)}
-                  onBlur={e  => (e.target.style.borderColor = blurStyle)}
+                  id="cf-name" type="text" name="name"
+                  value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+                  placeholder="John Doe" autoComplete="name"
+                  style={inputBase} onFocus={onFocus} onBlur={onBlur}
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label
-                  htmlFor="cf-email"
-                  className="block text-xs sm:text-sm font-semibold mb-1.5"
-                  style={{ color: "#C8C8E8" }}
-                >
+                <label htmlFor="cf-email" className="block text-xs sm:text-sm font-semibold mb-1.5"
+                  style={{ color: "#C8C8E8" }}>
                   Your Email <span style={{ color: "#9B5DE5" }}>*</span>
                 </label>
                 <input
-                  id="cf-email"
-                  type="email"
-                  name="from_email"
-                  value={form.email}
-                  onChange={e => setForm({ ...form, email: e.target.value })}
-                  placeholder="john@example.com"
-                  autoComplete="email"
-                  className="w-full px-4 py-3 rounded-xl text-sm sm:text-base outline-none transition-all"
-                  style={inputStyle}
-                  onFocus={e => (e.target.style.borderColor = focusStyle)}
-                  onBlur={e  => (e.target.style.borderColor = blurStyle)}
+                  id="cf-email" type="email" name="email"
+                  value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
+                  placeholder="john@example.com" autoComplete="email"
+                  style={inputBase} onFocus={onFocus} onBlur={onBlur}
                 />
               </div>
 
-              {/* Subject (optional) */}
+              {/* Subject */}
               <div>
-                <label
-                  htmlFor="cf-subject"
-                  className="block text-xs sm:text-sm font-semibold mb-1.5"
-                  style={{ color: "#C8C8E8" }}
-                >
+                <label htmlFor="cf-subject" className="block text-xs sm:text-sm font-semibold mb-1.5"
+                  style={{ color: "#C8C8E8" }}>
                   Subject
                   <span className="ml-1 text-xs font-normal" style={{ color: "#4B4B6A" }}>(optional)</span>
                 </label>
                 <input
-                  id="cf-subject"
-                  type="text"
-                  name="subject"
+                  id="cf-subject" type="text" name="subject"
+                  value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
                   placeholder="Project inquiry / Collaboration / Other"
-                  className="w-full px-4 py-3 rounded-xl text-sm sm:text-base outline-none transition-all"
-                  style={inputStyle}
-                  onFocus={e => (e.target.style.borderColor = focusStyle)}
-                  onBlur={e  => (e.target.style.borderColor = blurStyle)}
+                  style={inputBase} onFocus={onFocus} onBlur={onBlur}
                 />
               </div>
 
               {/* Message */}
               <div>
-                <label
-                  htmlFor="cf-message"
-                  className="block text-xs sm:text-sm font-semibold mb-1.5"
-                  style={{ color: "#C8C8E8" }}
-                >
+                <label htmlFor="cf-message" className="block text-xs sm:text-sm font-semibold mb-1.5"
+                  style={{ color: "#C8C8E8" }}>
                   Message <span style={{ color: "#9B5DE5" }}>*</span>
                 </label>
                 <textarea
-                  id="cf-message"
-                  name="message"
-                  value={form.message}
-                  onChange={e => setForm({ ...form, message: e.target.value })}
-                  rows={5}
-                  placeholder="Tell me about your project, timeline, and budget..."
-                  className="w-full px-4 py-3 rounded-xl text-sm sm:text-base outline-none transition-all resize-none"
-                  style={inputStyle}
-                  onFocus={e => (e.target.style.borderColor = focusStyle)}
-                  onBlur={e  => (e.target.style.borderColor = blurStyle)}
+                  id="cf-message" name="message"
+                  value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
+                  rows={5} placeholder="Tell me about your project..."
+                  style={{ ...inputBase, resize: "none" }}
+                  onFocus={onFocus} onBlur={onBlur}
                 />
                 <p className="text-xs mt-1" style={{ color: "#4B4B6A" }}>
-                  {form.message.length} / 1000 characters
+                  {form.message.length} characters
                 </p>
               </div>
 
               {/* Error banner */}
               {status === "error" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
                   className="flex items-start gap-3 p-3.5 rounded-xl"
                   style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)" }}
                 >
@@ -395,15 +338,14 @@ const ContactNew = () => {
               {/* Success banner */}
               {status === "success" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
                   className="flex items-start gap-3 p-3.5 rounded-xl"
                   style={{ background: "rgba(0,200,83,0.08)", border: "1px solid rgba(0,200,83,0.25)" }}
                 >
                   <CheckCircle size={18} className="flex-shrink-0 mt-0.5" style={{ color: "#00C853" }} />
                   <div>
                     <p className="text-sm font-semibold" style={{ color: "#69F0AE" }}>
-                      Message sent successfully!
+                      Message sent successfully! 🎉
                     </p>
                     <p className="text-xs mt-0.5" style={{ color: "#4B4B6A" }}>
                       I'll get back to you within 24 hours.
@@ -412,32 +354,27 @@ const ContactNew = () => {
                 </motion.div>
               )}
 
-              {/* Submit button */}
+              {/* Submit */}
               <motion.button
                 type="submit"
                 disabled={status === "sending" || status === "success"}
                 whileHover={status === "idle" || status === "error" ? { scale: 1.02 } : {}}
                 whileTap={status === "idle" || status === "error" ? { scale: 0.97 } : {}}
-                className="w-full py-3.5 rounded-xl text-sm sm:text-base font-bold text-white flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 rounded-xl text-sm sm:text-base font-bold text-white flex items-center justify-center gap-2"
                 style={{
-                  background:
-                    status === "success"
-                      ? "linear-gradient(135deg, #00C853, #00E676)"
-                      : "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
+                  background: status === "success"
+                    ? "linear-gradient(135deg, #00C853, #00E676)"
+                    : "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
                   opacity: status === "sending" ? 0.75 : 1,
                   cursor: status === "sending" || status === "success" ? "not-allowed" : "pointer",
                   minHeight: "48px",
-                  boxShadow:
-                    status === "idle" || status === "error"
-                      ? "0 4px 20px rgba(79,142,247,0.3)"
-                      : "none",
+                  boxShadow: status === "idle" || status === "error"
+                    ? "0 4px 20px rgba(79,142,247,0.3)" : "none",
+                  transition: "all 0.2s",
                 }}
               >
                 {status === "success" ? (
-                  <>
-                    <CheckCircle size={18} />
-                    Message Sent!
-                  </>
+                  <><CheckCircle size={18} /> Message Sent!</>
                 ) : status === "sending" ? (
                   <>
                     <motion.div
@@ -448,14 +385,10 @@ const ContactNew = () => {
                     Sending…
                   </>
                 ) : (
-                  <>
-                    <Send size={18} />
-                    Send Message
-                  </>
+                  <><Send size={18} /> Send Message</>
                 )}
               </motion.button>
 
-              {/* Privacy note */}
               <p className="text-center text-xs" style={{ color: "#4B4B6A" }}>
                 🔒 Your information is private and will never be shared.
               </p>
