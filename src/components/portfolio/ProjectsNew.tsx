@@ -1,207 +1,151 @@
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState, MouseEvent, useEffect } from "react";
-import { ExternalLink, Github, Eye } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { ExternalLink, Github } from "lucide-react";
 import { projects, socialLinks } from "@/data/portfolio-data";
 
 const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: number }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [glarePosition, setGlarePosition] = useState({ x: 50, y: 50 });
-  
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 300, damping: 30 });
-
-  useEffect(() => {
-    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-  }, []);
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (isTouchDevice || !cardRef.current) return;
-    
-    const rect = cardRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    const x = (e.clientX - centerX) / rect.width;
-    const y = (e.clientY - centerY) / rect.height;
-    
-    mouseX.set(x);
-    mouseY.set(y);
-    
-    // Update glare position for holographic effect
-    const glareX = ((e.clientX - rect.left) / rect.width) * 100;
-    const glareY = ((e.clientY - rect.top) / rect.height) * 100;
-    setGlarePosition({ x: glareX, y: glareY });
-  };
-
-  const handleMouseLeave = () => {
-    if (isTouchDevice) return;
-    mouseX.set(0);
-    mouseY.set(0);
-    setIsHovered(false);
-  };
+  const [hovered, setHovered] = useState(false);
 
   return (
     <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 50, rotateX: 45 }}
-      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ 
-        delay: index * 0.1, 
-        duration: 0.8,
-        type: "spring",
-        stiffness: 100,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => !isTouchDevice && setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      whileHover={!isTouchDevice ? { 
-        scale: 1.05, 
-        translateZ: 50,
-      } : {}}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ delay: index * 0.1, duration: 0.6 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -6 }}
+      className="group rounded-2xl overflow-hidden flex flex-col h-full"
       style={{
-        rotateX: isTouchDevice ? 0 : rotateX,
-        rotateY: isTouchDevice ? 0 : rotateY,
-        transformStyle: isTouchDevice ? 'flat' : 'preserve-3d',
-        perspective: isTouchDevice ? 'none' : '1000px',
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(79,142,247,0.1)",
+        transition: "border-color 0.3s",
       }}
-      className="group relative"
+      onMouseEnterCapture={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(79,142,247,0.3)")}
+      onMouseLeaveCapture={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(79,142,247,0.1)")}
     >
-      <div className="glass rounded-3xl overflow-hidden border border-primary/10 hover:border-primary/30 transition-all duration-500 h-full relative">
-        {/* Holographic glare effect - follows mouse */}
-        {isHovered && !isTouchDevice && (
-          <motion.div
-            className="absolute inset-0 pointer-events-none z-20"
-            style={{
-              background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(79, 142, 247, 0.4) 0%, rgba(155, 93, 229, 0.2) 25%, transparent 50%)`,
-              mixBlendMode: 'overlay',
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-          />
-        )}
-
-        {/* Image with overlay */}
-        <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
-          <motion.img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover"
-            animate={{ scale: isHovered ? 1.1 : 1 }}
-            transition={{ duration: 0.6 }}
-            loading="lazy"
-          />
-          
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-60" />
-          
-          {/* Hover overlay with 3D buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: isHovered ? 1 : 0,
-              y: isHovered ? 0 : 20,
-            }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center gap-4"
-          >
-            {project.liveUrl && project.liveUrl !== "#" && (
-              <motion.a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.15, rotate: 5 }}
-                whileTap={{ scale: 0.9, translateZ: -10 }}
-                className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg hover:shadow-primary/50 transition-all"
-                aria-label="Live Demo"
-                style={{ 
-                  transform: "translateZ(50px)",
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                <ExternalLink className="w-6 h-6" />
-              </motion.a>
-            )}
-            {project.githubUrl && project.githubUrl !== "#" && (
-              <motion.a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.15, rotate: -5 }}
-                whileTap={{ scale: 0.9, translateZ: -10 }}
-                className="w-14 h-14 rounded-full glass border-2 border-primary/30 flex items-center justify-center hover:border-primary/60 hover:bg-primary/10 transition-all"
-                aria-label="GitHub Repository"
-                style={{ 
-                  transform: "translateZ(50px)",
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                <Github className="w-6 h-6" />
-              </motion.a>
-            )}
-          </motion.div>
-        </div>
-
-        {/* Content */}
-        <div className="p-6 md:p-8" style={{ transform: "translateZ(20px)" }}>
-          {/* Title - Plus Jakarta heading font */}
-          <h3 className="font-heading text-xl md:text-2xl font-extrabold text-foreground mb-3 group-hover:text-primary transition-colors tracking-tight">
-            {project.title}
-          </h3>
-          
-          {/* Description - Inter body font */}
-          <p className="font-body text-body-md text-muted-foreground mb-6 leading-relaxed line-clamp-3">
-            {project.description}
-          </p>
-          
-          {/* Tech stack with floating animation - JetBrains Mono */}
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((tech, i) => (
-              <motion.span
-                key={tech}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  delay: index * 0.1 + i * 0.05,
-                  type: "spring",
-                  stiffness: 200,
-                }}
-                whileHover={{ 
-                  scale: 1.15, 
-                  y: -5,
-                  boxShadow: "0 5px 15px rgba(79, 142, 247, 0.4)",
-                }}
-                animate={{
-                  y: [0, -3, 0],
-                  transition: {
-                    duration: 2 + i * 0.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }
-                }}
-                className="px-3 py-1.5 rounded-full font-mono text-mono-sm font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-all cursor-default uppercase tracking-wider"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {tech}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-
-        {/* Shine effect */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
-          initial={{ x: "-100%" }}
-          animate={isHovered ? { x: "100%" } : {}}
-          transition={{ duration: 0.8 }}
+      {/* Image */}
+      <div className="relative overflow-hidden" style={{ height: "clamp(160px, 25vw, 220px)" }}>
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover"
+          animate={{ scale: hovered ? 1.08 : 1 }}
+          transition={{ duration: 0.5 }}
+          loading="lazy"
         />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to top, rgba(5,5,8,0.9) 0%, rgba(5,5,8,0.3) 50%, transparent 100%)",
+          }}
+        />
+
+        {/* Hover action buttons */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+          className="absolute inset-0 flex items-center justify-center gap-3"
+          style={{ background: "rgba(5,5,8,0.75)", backdropFilter: "blur(4px)" }}
+        >
+          {project.liveUrl && project.liveUrl !== "#" && (
+            <motion.a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white"
+              style={{ background: "linear-gradient(135deg, #4F8EF7, #9B5DE5)" }}
+              aria-label="Live Demo"
+            >
+              <ExternalLink size={14} />
+              Live Demo
+            </motion.a>
+          )}
+          {project.githubUrl && project.githubUrl !== "#" && (
+            <motion.a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold"
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "#F0F0FF",
+              }}
+              aria-label="GitHub"
+            >
+              <Github size={14} />
+              Code
+            </motion.a>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-4 sm:p-5">
+        <h3
+          className="font-bold text-base sm:text-lg mb-2 transition-colors duration-200"
+          style={{ color: hovered ? "#4F8EF7" : "#F0F0FF" }}
+        >
+          {project.title}
+        </h3>
+        <p className="text-xs sm:text-sm leading-relaxed mb-4 flex-1" style={{ color: "#8888AA" }}>
+          {project.description}
+        </p>
+
+        {/* Tech tags */}
+        <div className="flex flex-wrap gap-1.5">
+          {project.tech.map(tech => (
+            <span
+              key={tech}
+              className="px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-mono font-semibold"
+              style={{
+                background: "rgba(79,142,247,0.08)",
+                border: "1px solid rgba(79,142,247,0.18)",
+                color: "#7BAEF7",
+              }}
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        {/* Mobile action links */}
+        <div className="flex gap-2 mt-4 sm:hidden">
+          {project.liveUrl && project.liveUrl !== "#" && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-white flex-1 justify-center"
+              style={{ background: "rgba(79,142,247,0.15)", border: "1px solid rgba(79,142,247,0.3)" }}
+            >
+              <ExternalLink size={12} />
+              Live
+            </a>
+          )}
+          {project.githubUrl && project.githubUrl !== "#" && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold flex-1 justify-center"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#8888AA",
+              }}
+            >
+              <Github size={12} />
+              Code
+            </a>
+          )}
+        </div>
       </div>
     </motion.div>
   );
@@ -209,131 +153,86 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
 
 const ProjectsNew = () => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="projects" className="relative py-20 md:py-32 overflow-hidden">
+    <section id="projects" className="relative py-16 sm:py-20 lg:py-28 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background" />
-      
-      {/* Floating shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 40% at 80% 50%, rgba(79,142,247,0.05) 0%, transparent 60%)",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+        {/* Header */}
         <motion.div
-          className="absolute top-40 right-20 w-40 h-40 border-2 border-accent/20 rounded-full"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      </div>
-      
-      <div className="container mx-auto px-6 relative z-10" ref={ref}>
-        {/* Header with typography system */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20 relative"
+          className="text-center mb-12 sm:mb-16"
         >
-          {/* Small mono label */}
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.2 }}
-            className="inline-block px-6 py-2 rounded-full glass border border-primary/20 font-mono text-label text-primary tracking-[0.2em] uppercase mb-6"
-          >
+          <p className="text-xs sm:text-sm font-mono tracking-[0.25em] uppercase mb-3" style={{ color: "#4F8EF7" }}>
             🚀 Featured Work
-          </motion.span>
-          
-          {/* Main heading - Syne Display with 3D depth */}
-          <motion.h2 
-            className="font-display text-display-lg font-bold mb-6 tracking-[-0.02em]"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.3 }}
+          </p>
+          <h2
+            className="font-black tracking-tight mb-4"
+            style={{ fontSize: "clamp(2rem, 6vw, 3.5rem)", color: "#F0F0FF" }}
           >
-            <span 
-              className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
+            Selected{" "}
+            <span
               style={{
-                textShadow: `
-                  1px 1px 0 #1a1a2e,
-                  2px 2px 0 #1a1a2e,
-                  3px 3px 0 #1a1a2e,
-                  4px 4px 0 #0d0d14,
-                  5px 5px 0 #0d0d14,
-                  6px 6px 0 #0d0d14
-                `,
+                background: "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
-              Selected Projects
+              Projects
             </span>
-          </motion.h2>
-          
-          {/* Subtitle - Inter body font */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.4 }}
-            className="font-body text-body-lg text-muted-foreground max-w-2xl mx-auto"
-          >
-            Showcasing my latest work in web development and design
-          </motion.p>
-          
-          {/* Large Bebas watermark */}
+          </h2>
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={inView ? { opacity: 0.025, scale: 1 } : {}}
-            transition={{ duration: 1.2, delay: 0.5 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider pointer-events-none whitespace-nowrap"
-            style={{ 
-              textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
-            }}
-          >
-            PROJECTS
-          </motion.div>
+            initial={{ scaleX: 0 }}
+            animate={inView ? { scaleX: 1 } : {}}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="w-16 h-1 mx-auto rounded-full"
+            style={{ background: "linear-gradient(90deg, #4F8EF7, #9B5DE5)", transformOrigin: "center" }}
+          />
+          <p className="mt-4 text-sm sm:text-base max-w-xl mx-auto" style={{ color: "#6B6B8A" }}>
+            Showcasing my latest work in web development and design
+          </p>
         </motion.div>
 
-        {/* Projects Grid - 3D Perspective Container */}
-        <div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto"
-          style={{ perspective: "1200px" }}
-        >
+        {/* Projects grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
 
-        {/* View More CTA with 3D effect */}
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="text-center mt-16"
+          transition={{ delay: 0.6 }}
+          className="text-center mt-10 sm:mt-12"
         >
           <motion.a
             href={socialLinks.github}
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ 
-              scale: 1.05,
-              rotateX: -5,
-              rotateY: 5,
-              boxShadow: "0 20px 40px rgba(79, 142, 247, 0.3)",
-            }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass border border-primary/30 font-heading font-semibold text-body-md tracking-[0.02em] hover:border-primary/60 hover:bg-primary/5 transition-all duration-300"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm sm:text-base font-semibold"
             style={{
-              transformStyle: "preserve-3d",
-              perspective: "1000px",
+              background: "rgba(79,142,247,0.08)",
+              border: "1px solid rgba(79,142,247,0.25)",
+              color: "#7BAEF7",
             }}
           >
-            <Eye className="w-5 h-5" />
-            View All Projects on GitHub
+            <Github size={18} />
+            View All on GitHub
           </motion.a>
         </motion.div>
       </div>

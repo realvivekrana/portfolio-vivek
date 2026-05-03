@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App-minimal.tsx"; // Using minimal version
+import App from "./App-minimal.tsx"; // Using minimal version - no lazy loading
 import "./index.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 

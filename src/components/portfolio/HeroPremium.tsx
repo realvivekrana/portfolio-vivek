@@ -1,463 +1,258 @@
-import { useEffect, useState, useRef } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { ArrowDown, Download, Briefcase } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowDown, Download, Briefcase, Github, Linkedin, Twitter } from "lucide-react";
 import profileImg from "@/assets/vivek-profile.jpg";
 import { personalInfo } from "@/data/portfolio-data";
 
-const premiumRoles = [
-  "React Developer",
-  "MERN Stack Developer", 
-  "Frontend Engineer",
-  "UI Craftsman"
-];
+const roles = ["React Developer", "MERN Stack Dev", "Frontend Engineer", "UI Craftsman"];
 
 const HeroPremium = () => {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0.5, y: 0.5 });
-  
-  // Mouse position for parallax
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  // Transform mouse position to rotation
-  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-15, 15]);
 
-  // Typewriter effect
   useEffect(() => {
-    const currentRole = premiumRoles[roleIndex];
-    const typingSpeed = isDeleting ? 50 : 100;
-
-    const timeout = setTimeout(() => {
-      if (!isDeleting && displayText.length < currentRole.length) {
-        setDisplayText(currentRole.slice(0, displayText.length + 1));
-      } else if (!isDeleting && displayText.length === currentRole.length) {
-        setTimeout(() => setIsDeleting(true), 2000);
+    const current = roles[roleIndex];
+    const speed = isDeleting ? 40 : 90;
+    const t = setTimeout(() => {
+      if (!isDeleting && displayText.length < current.length) {
+        setDisplayText(current.slice(0, displayText.length + 1));
+      } else if (!isDeleting && displayText.length === current.length) {
+        setTimeout(() => setIsDeleting(true), 1800);
       } else if (isDeleting && displayText.length > 0) {
-        setDisplayText(currentRole.slice(0, displayText.length - 1));
-      } else if (isDeleting && displayText.length === 0) {
+        setDisplayText(current.slice(0, displayText.length - 1));
+      } else {
         setIsDeleting(false);
-        setRoleIndex((prev) => (prev + 1) % premiumRoles.length);
+        setRoleIndex(p => (p + 1) % roles.length);
       }
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
+    }, speed);
+    return () => clearTimeout(t);
   }, [displayText, isDeleting, roleIndex]);
-
-  // Mouse move handler for cursor glow
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      setCursorPosition({ x, y });
-      
-      // Update mouse position for 3D tilt
-      const rect = document.getElementById('home')?.getBoundingClientRect();
-      if (rect) {
-        mouseX.set(e.clientX - rect.left - rect.width / 2);
-        mouseY.set(e.clientY - rect.top - rect.height / 2);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
 
   const resumeUrl = `${import.meta.env.BASE_URL}${personalInfo.resumePath}`;
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12"
-      style={{ background: '#050508' }}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      style={{ background: "#050508" }}
     >
-      {/* Radial spotlight from top-center + cursor-following glow */}
+      {/* Background glow */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            radial-gradient(circle at ${cursorPosition.x * 100}% ${cursorPosition.y * 100}%, rgba(79, 142, 247, 0.15) 0%, transparent 30%),
-            radial-gradient(circle at 50% 0%, rgba(79, 142, 247, 0.07) 0%, transparent 50%)
-          `,
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(79,142,247,0.12) 0%, transparent 60%)",
+        }}
+      />
+      {/* Grid pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(79,142,247,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(79,142,247,0.5) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
         }}
       />
 
-      {/* Large Bebas Neue background watermark */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.025, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
-          className="font-bebas text-[clamp(120px,20vw,220px)] font-normal text-white/[0.03] leading-none tracking-wider"
-          style={{ 
-            textShadow: '0 0 40px rgba(79, 142, 247, 0.1)',
-          }}
-        >
-          VIVEK RANA
-        </motion.div>
-      </div>
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-28 sm:pb-20">
+        {/* Mobile: stack, Desktop: side by side */}
+        <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:gap-16">
 
-      {/* Responsive layout container */}
-      <div className="w-full max-w-7xl mx-auto relative z-10 py-20 sm:py-24 md:py-28 lg:py-0">
-        <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
-          {/* LEFT COLUMN - Text Content */}
+          {/* ── PHOTO (mobile: top-center, desktop: right) ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="order-1 lg:order-2 flex-shrink-0 flex flex-col items-center gap-4"
+          >
+            {/* Photo ring */}
+            <div className="relative">
+              {/* Animated ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-2 rounded-full"
+                style={{
+                  background: "conic-gradient(from 0deg, #4F8EF7, #9B5DE5, #4F8EF7)",
+                  padding: "2px",
+                  borderRadius: "50%",
+                }}
+              />
+              <div
+                className="relative rounded-full overflow-hidden"
+                style={{
+                  width: "clamp(120px, 28vw, 200px)",
+                  height: "clamp(120px, 28vw, 200px)",
+                  border: "4px solid #050508",
+                  boxShadow: "0 0 60px rgba(79,142,247,0.25)",
+                }}
+              >
+                <img
+                  src={profileImg}
+                  alt="Vivek Rana"
+                  className="w-full h-full object-cover object-top"
+                  loading="eager"
+                />
+              </div>
+            </div>
+
+            {/* Available badge */}
+            <motion.div
+              animate={{ y: [0, -4, 0] }}
+              transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-mono font-semibold tracking-widest uppercase"
+              style={{
+                background: "rgba(0,255,100,0.07)",
+                border: "1px solid rgba(0,255,100,0.3)",
+                color: "#00FF64",
+              }}
+            >
+              <span className="w-2 h-2 rounded-full bg-[#00FF64] animate-pulse" />
+              Available
+            </motion.div>
+          </motion.div>
+
+          {/* ── TEXT CONTENT ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex-1 text-center lg:text-left w-full"
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="order-2 lg:order-1 flex-1 text-center lg:text-left"
           >
-            {/* Name with Syne Display font - most important text */}
+            {/* Greeting */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-sm sm:text-base font-mono tracking-[0.2em] uppercase mb-3"
+              style={{ color: "#4F8EF7" }}
+            >
+              👋 Hello, I'm
+            </motion.p>
+
+            {/* Name */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="font-display text-display-2xl font-extrabold text-white tracking-[-0.04em] leading-[0.92] mb-4 sm:mb-5 md:mb-6 uppercase"
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="font-black uppercase leading-none tracking-tight mb-4"
+              style={{
+                fontSize: "clamp(2.8rem, 10vw, 6rem)",
+                background: "linear-gradient(135deg, #ffffff 0%, #c8d8ff 50%, #9B5DE5 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow: "none",
+              }}
             >
-              {['V', 'I', 'V', 'E', 'K', ' ', 'R', 'A', 'N', 'A'].map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: -100, rotateX: 90 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{
-                    delay: 0.2 + i * 0.05,
-                    duration: 0.8,
-                    type: 'spring',
-                    stiffness: 200,
-                  }}
-                  whileHover={{ 
-                    y: -10, 
-                    scale: 1.2,
-                    color: '#4F8EF7',
-                    textShadow: '0 0 20px rgba(79, 142, 247, 0.8)',
-                  }}
-                  style={{
-                    display: 'inline-block',
-                    textShadow: '0 0 60px rgba(79, 142, 247, 0.3)',
-                    cursor: 'default',
-                  }}
-                >
-                  {letter === ' ' ? '\u00A0' : letter}
-                </motion.span>
-              ))}
+              Vivek Rana
             </motion.h1>
 
-            {/* Typewriter role - JetBrains Mono for tech feel */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mb-6 sm:mb-7 md:mb-8 h-10 sm:h-11 md:h-12 flex items-center justify-center lg:justify-start"
-            >
-              <span className="font-mono text-mono-lg font-bold text-[#4F8EF7] tracking-[0.05em] uppercase">
-                {displayText.split('').map((char, i) => (
-                  <motion.span
-                    key={`${char}-${i}`}
-                    initial={{ opacity: 0, rotateX: 90 }}
-                    animate={{ opacity: 1, rotateX: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ display: 'inline-block' }}
-                  >
-                    {char}
-                  </motion.span>
-                ))}
+            {/* Typewriter role */}
+            <div className="h-8 sm:h-10 flex items-center justify-center lg:justify-start mb-5">
+              <span
+                className="text-base sm:text-xl font-mono font-bold tracking-wider uppercase"
+                style={{ color: "#4F8EF7" }}
+              >
+                {displayText}
                 <span className="animate-pulse">|</span>
               </span>
-            </motion.div>
+            </div>
 
-            {/* Bio - Inter body font for readability */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="font-body text-body-lg font-light text-[#8888AA] leading-[1.85] max-w-[520px] mb-8 sm:mb-9 md:mb-10 mx-auto lg:mx-0"
+            {/* Bio */}
+            <p
+              className="text-sm sm:text-base leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
+              style={{ color: "#8888AA" }}
             >
               {personalInfo.bio}
-            </motion.p>
+            </p>
 
-            {/* CTA Buttons - Stack on mobile, side by side on tablet+ */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start max-w-md mx-auto lg:mx-0"
-            >
-              {/* View My Work - Plus Jakarta Sans heading font */}
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-8">
               <motion.button
                 onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
-                whileHover={{ scale: 1.04, rotateX: -5, rotateY: 5 }}
-                whileTap={{ scale: 0.96, translateZ: -10 }}
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-heading text-body-md font-semibold tracking-[0.05em] uppercase w-full sm:w-auto"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm sm:text-base font-bold text-white w-full sm:w-auto"
                 style={{
-                  background: '#4F8EF7',
-                  color: '#FFFFFF',
-                  borderRadius: '50px',
-                  border: 'none',
-                  transition: 'all 0.3s ease',
-                  minHeight: '48px',
-                  transformStyle: 'preserve-3d',
-                  perspective: '1000px',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 30px rgba(79, 142, 247, 0.5)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
+                  background: "linear-gradient(135deg, #4F8EF7, #9B5DE5)",
+                  boxShadow: "0 4px 20px rgba(79,142,247,0.35)",
+                  minHeight: "48px",
                 }}
               >
-                <Briefcase className="inline-block w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <Briefcase size={18} />
                 View My Work
               </motion.button>
 
-              {/* Download CV - Plus Jakarta Sans heading font */}
               <motion.a
                 href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.04, rotateX: -5, rotateY: -5 }}
-                whileTap={{ scale: 0.96 }}
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 font-heading text-body-md font-semibold tracking-[0.05em] uppercase overflow-hidden w-full sm:w-auto"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm sm:text-base font-bold w-full sm:w-auto"
                 style={{
-                  background: 'transparent',
-                  color: '#F0F0FF',
-                  borderRadius: '50px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  transition: 'all 0.3s ease',
-                  minHeight: '48px',
-                  transformStyle: 'preserve-3d',
-                  perspective: '1000px',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#4F8EF7';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                  background: "transparent",
+                  border: "1.5px solid rgba(79,142,247,0.4)",
+                  color: "#F0F0FF",
+                  minHeight: "48px",
                 }}
               >
-                <span className="relative z-10 flex items-center justify-center">
-                  <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  Download CV
-                </span>
-                {/* 3D Shine sweep */}
-                <motion.div
-                  className="absolute inset-0"
-                  style={{
-                    background: 'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
-                    transform: 'translateZ(1px)',
-                  }}
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '100%' }}
-                  transition={{ duration: 0.6 }}
-                />
+                <Download size={18} />
+                Download CV
               </motion.a>
-            </motion.div>
-          </motion.div>
+            </div>
 
-          {/* RIGHT COLUMN - 3D Flip Card Photo + Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex-shrink-0 flex flex-col items-center w-full lg:w-auto"
-            style={{ perspective: '1000px' }}
-          >
-            {/* 3D Flip Card Container */}
-            <motion.div
-              className="relative mb-6 cursor-pointer"
-              style={{
-                transformStyle: 'preserve-3d',
-                width: 'clamp(110px, 25vw, 180px)',
-                height: 'clamp(110px, 25vw, 180px)',
-              }}
-              animate={{
-                rotateY: isFlipped ? 180 : 0,
-              }}
-              transition={{ duration: 0.6, type: 'spring' }}
-              onClick={() => setIsFlipped(!isFlipped)}
-              onMouseEnter={() => setIsPhotoHovered(true)}
-              onMouseLeave={() => setIsPhotoHovered(false)}
-            >
-              {/* Radial glow aura */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, rgba(79, 142, 247, 0.2) 0%, transparent 70%)',
-                  filter: 'blur(80px)',
-                  transform: 'scale(1.8)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* FRONT SIDE - Profile Photo */}
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
-              >
-                {/* Outer ring - pulsing opacity */}
-                <div
-                  className="absolute inset-0 rounded-full"
+            {/* Social links */}
+            <div className="flex items-center gap-3 justify-center lg:justify-start">
+              {[
+                { icon: Github, href: "https://github.com/realvivekrana", label: "GitHub" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/mrvivekrana/", label: "LinkedIn" },
+                { icon: Twitter, href: "https://x.com/mrvivaanrana", label: "Twitter" },
+              ].map(({ icon: Icon, href, label }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
                   style={{
-                    padding: '8px',
-                    background: 'linear-gradient(135deg, #4F8EF7, #9B5DE5, #4F8EF7)',
-                    backgroundSize: '200% 200%',
-                    animation: 'pulse-ring 3s ease-in-out infinite',
+                    background: "rgba(79,142,247,0.08)",
+                    border: "1px solid rgba(79,142,247,0.2)",
+                    color: "#8888AA",
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#4F8EF7")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#8888AA")}
                 >
-                  <div
-                    className="w-full h-full rounded-full"
-                    style={{ background: '#050508' }}
-                  />
-                </div>
-
-                {/* Inner ring - rotating gradient */}
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    padding: '4px',
-                    background: 'linear-gradient(45deg, #4F8EF7, #9B5DE5, #4F8EF7)',
-                    backgroundSize: '200% 200%',
-                    animation: isPhotoHovered 
-                      ? 'gradient-spin 2s linear infinite' 
-                      : 'gradient-spin 4s linear infinite',
-                  }}
-                >
-                  <div
-                    className="w-full h-full rounded-full"
-                    style={{ background: '#050508' }}
-                  />
-                </div>
-
-                {/* Profile image */}
-                <motion.div
-                  className="relative rounded-full overflow-hidden"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    border: '4px solid #050508',
-                    boxShadow: '0 0 40px rgba(79, 142, 247, 0.3)',
-                  }}
-                  animate={{ scale: isPhotoHovered ? 1.05 : 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src={profileImg}
-                    alt="Vivek Rana"
-                    className="w-full h-full"
-                    style={{ 
-                      objectFit: 'cover',
-                      objectPosition: 'center top',
-                    }}
-                    loading="eager"
-                  />
-                </motion.div>
-              </motion.div>
-
-              {/* BACK SIDE - Skills Summary */}
-              <motion.div
-                className="absolute inset-0 rounded-full flex items-center justify-center p-6"
-                style={{
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)',
-                  background: 'linear-gradient(135deg, rgba(79, 142, 247, 0.2), rgba(155, 93, 229, 0.2))',
-                  border: '2px solid rgba(79, 142, 247, 0.5)',
-                  backdropFilter: 'blur(20px)',
-                }}
-              >
-                <div className="text-center">
-                  <p className="text-xs font-bold text-primary mb-2">Quick Skills</p>
-                  <div className="flex flex-wrap gap-1 justify-center">
-                    {['React', 'Node.js', 'MongoDB', 'TypeScript'].map((skill, i) => (
-                      <span
-                        key={i}
-                        className="text-[8px] px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-[8px] text-muted-foreground mt-2">Click to flip back</p>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Available badge - below photo with mono font */}
-            <motion.div
-              animate={{ y: [0, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full"
-              style={{
-                background: 'rgba(0, 255, 100, 0.08)',
-                border: '1px solid rgba(0, 255, 100, 0.3)',
-              }}
-            >
-              <span
-                className="w-2 h-2 rounded-full animate-pulse flex-shrink-0"
-                style={{ background: '#00FF64' }}
-              />
-              <span 
-                className="font-mono text-label tracking-[0.15em] uppercase whitespace-nowrap"
-                style={{ color: '#00FF64' }}
-              >
-                Currently Available
-              </span>
-            </motion.div>
+                  <Icon size={18} />
+                </motion.a>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator - styled properly */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-1"
       >
-        <motion.button
-          onClick={() => document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" })}
-          className="flex flex-col items-center gap-2 group"
-          style={{ color: '#6B6B8A' }}
+        <span className="text-[10px] font-mono tracking-[0.2em] uppercase" style={{ color: "#4B4B6A" }}>
+          Scroll
+        </span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+          style={{ color: "#4B4B6A" }}
         >
-          <span 
-            style={{ 
-              fontSize: '12px', 
-              fontWeight: 500,
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
-            }}
-            className="group-hover:text-[#4F8EF7] transition-colors"
-          >
-            Scroll Down
-          </span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="group-hover:text-[#4F8EF7] transition-colors"
-          >
-            <ArrowDown className="w-4 h-4" />
-          </motion.div>
-        </motion.button>
+          <ArrowDown size={14} />
+        </motion.div>
       </motion.div>
-
-      <style>{`
-        @keyframes gradient-spin {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes pulse-ring {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
-      `}</style>
     </section>
   );
 };
