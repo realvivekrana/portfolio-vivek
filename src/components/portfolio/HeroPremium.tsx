@@ -29,7 +29,7 @@ const HeroPremium = () => {
     return () => clearTimeout(t);
   }, [displayText, isDeleting, roleIndex]);
 
-  const resumeUrl = `${import.meta.env.BASE_URL}${personalInfo.resumePath}`;
+  const resumeUrl = "/Vivek-Kumar-Rana-Resume.pdf";
 
   return (
     <section
@@ -186,6 +186,7 @@ const HeroPremium = () => {
 
               <motion.a
                 href={resumeUrl}
+                download="Vivek-Kumar-Rana-Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
