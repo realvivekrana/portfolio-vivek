@@ -17,9 +17,9 @@ import { personalInfo } from "@/data/portfolio-data";
 //     →  copy TEMPLATE_ID
 //  4. Account → API Keys  →  copy PUBLIC_KEY
 // ─────────────────────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";   // e.g. "service_abc123"
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // e.g. "template_xyz789"
-const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";   // e.g. "AbCdEfGhIjKlMnOp"
+const EMAILJS_SERVICE_ID  = "service_5ek5x96i";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // ← Go to EmailJS → Email Templates → copy ID
+const EMAILJS_PUBLIC_KEY  = "O03STzf4wGjZ_XQQpUjgpYmijkISBEy6YNQf4";
 
 type Status = "idle" | "sending" | "success" | "error";
 
